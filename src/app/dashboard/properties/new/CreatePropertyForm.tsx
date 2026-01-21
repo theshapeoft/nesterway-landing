@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { Button } from "@/components/ui";
 import { FormField } from "@/components/auth/FormField";
-import { LocationInput, LocationData } from "@/components/dashboard";
+import { LocationInput, LocationData, TemplateSelector } from "@/components/dashboard";
 import { Loader2 } from "lucide-react";
 
 interface CreatePropertyFormProps {
@@ -12,6 +12,7 @@ interface CreatePropertyFormProps {
 
 export function CreatePropertyForm({ createProperty }: CreatePropertyFormProps) {
   const [location, setLocation] = useState<LocationData | null>(null);
+  const [templateId, setTemplateId] = useState<string | null>("blank");
 
   const [state, formAction, isPending] = useActionState(
     async (_prevState: { error?: string } | null, formData: FormData) => {
@@ -24,6 +25,10 @@ export function CreatePropertyForm({ createProperty }: CreatePropertyFormProps) 
         formData.set("longitude", location.longitude.toString());
         formData.set("place_id", location.placeId);
       }
+      // Append template selection
+      if (templateId) {
+        formData.set("template_id", templateId);
+      }
       const result = await createProperty(formData);
       return result ?? null;
     },
@@ -31,7 +36,7 @@ export function CreatePropertyForm({ createProperty }: CreatePropertyFormProps) 
   );
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-6">
       <FormField
         label="Property Name"
         name="name"
@@ -50,7 +55,13 @@ export function CreatePropertyForm({ createProperty }: CreatePropertyFormProps) 
         hint="Search for your property's full address"
       />
 
-      <div className="flex gap-3 pt-4">
+      <TemplateSelector
+        value={templateId}
+        onChange={setTemplateId}
+        disabled={isPending}
+      />
+
+      <div className="flex gap-3 pt-2">
         <Button
           type="button"
           variant="secondary"

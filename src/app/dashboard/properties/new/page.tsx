@@ -1,12 +1,11 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui";
 import { createProperty } from "@/lib/actions/properties";
 import { CreatePropertyForm } from "./CreatePropertyForm";
 
 export default function NewPropertyPage() {
   return (
-    <div className="mx-auto max-w-md px-4 py-8">
+    <div className="mx-auto max-w-lg px-4 py-8">
       {/* Back link */}
       <Link
         href="/dashboard"
@@ -22,8 +21,8 @@ export default function NewPropertyPage() {
           Create New Property
         </h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Add a new property to your portfolio. You can add all the details
-          after creation.
+          Add a new property to your portfolio. Choose a template to get started
+          quickly, or start from scratch.
         </p>
 
         <CreatePropertyForm createProperty={createProperty} />

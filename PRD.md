@@ -219,15 +219,15 @@ Tent Card:                      Wall Sign:
 **User Story:** As a new host, I want to start from a template when creating a property, so that I have a helpful starting point with common rules and sections.
 
 **Acceptance Criteria:**
-- [ ] Template selection step when creating new property
-- [ ] Templates available:
+- [x] Template selection step when creating new property
+- [x] Templates available:
   - **Blank** — Start from scratch
   - **Apartment** — Common apartment rules, typical appliances
   - **House** — Outdoor space rules, garage/parking info
   - **Studio** — Compact layout, essential info only
-- [ ] Template pre-fills: House rules, Appliances, Custom sections
-- [ ] User can edit all pre-filled content
-- [ ] "Skip" option to start blank
+- [x] Template pre-fills: House rules, Appliances, Custom sections
+- [x] User can edit all pre-filled content
+- [x] "Skip" option to start blank
 
 ---
 

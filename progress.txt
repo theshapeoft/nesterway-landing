@@ -115,7 +115,30 @@
     - Placeholder styling for empty editor
   - Installed packages: @tiptap/react, @tiptap/pm, @tiptap/starter-kit, @tiptap/extension-character-count, isomorphic-dompurify
 
+- [x] **Property Templates** (2026-01-21)
+  - Created property templates system: src/lib/templates/property-templates.ts
+    - 4 templates: Blank, Apartment, House, Studio
+    - Each template includes pre-defined rules, appliances, and custom sections
+    - Type-safe template definitions with TypeScript interfaces
+  - Created TemplateSelector component: src/components/dashboard/TemplateSelector.tsx
+    - 2x2 grid of template cards with icons (File, Building, Home, Square)
+    - Visual selection state with checkmark and primary color highlight
+    - Responsive design, accessible with keyboard navigation
+  - Updated CreatePropertyForm: src/app/dashboard/properties/new/CreatePropertyForm.tsx
+    - Added template selector below location input
+    - Template ID passed to server action on form submission
+  - Updated createProperty server action: src/lib/actions/properties.ts
+    - Accepts optional template_id from form data
+    - Applies template content after property creation
+    - Creates house_rules section with pre-filled rules
+    - Creates appliances section with pre-filled appliances
+    - Creates custom sections from template (e.g., Building Access, Parking, Space Tips)
+  - Template content:
+    - Apartment: 5 rules, 4 appliances, 1 custom section (Building Access)
+    - House: 6 rules, 5 appliances, 2 custom sections (Parking, Garden & Outdoor)
+    - Studio: 4 rules, 3 appliances, 1 custom section (Space Tips)
+    - Blank: No pre-filled content (start from scratch)
+
 ## Next Tasks
-- [ ] Property Templates (Phase 5)
 - [ ] Analytics Events Integration (Phase 5)
 - [ ] Offline Caching for Guest Pages (Phase 6)

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getTemplateById } from "@/lib/templates";
 
 // Types for database records
 export interface DbProperty {
@@ -85,6 +86,7 @@ export async function createProperty(formData: FormData) {
   }
 
   const name = formData.get("name") as string;
+  const templateId = formData.get("template_id") as string | null;
 
   // Location fields from Google Places
   const address = formData.get("address") as string | null;
@@ -130,6 +132,49 @@ export async function createProperty(formData: FormData) {
   if (error) {
     console.error("Error creating property:", error);
     return { error: "Failed to create property. Please try again." };
+  }
+
+  // Apply template content if selected (and not blank)
+  if (templateId && templateId !== "blank") {
+    const template = getTemplateById(templateId);
+    if (template) {
+      // Insert house rules section if template has rules
+      if (template.rules.length > 0) {
+        await supabase.from("property_sections").insert({
+          property_id: data.id,
+          section_type: "house_rules",
+          title: "House Rules",
+          icon: "clipboard-list",
+          content: template.rules,
+          display_order: 0,
+        });
+      }
+
+      // Insert appliances section if template has appliances
+      if (template.appliances.length > 0) {
+        await supabase.from("property_sections").insert({
+          property_id: data.id,
+          section_type: "appliances",
+          title: "Appliances",
+          icon: "plug",
+          content: template.appliances,
+          display_order: 1,
+        });
+      }
+
+      // Insert custom sections from template
+      for (let i = 0; i < template.customSections.length; i++) {
+        const section = template.customSections[i];
+        await supabase.from("property_sections").insert({
+          property_id: data.id,
+          section_type: "custom",
+          title: section.title,
+          icon: section.icon,
+          content: section.content,
+          display_order: 2 + i,
+        });
+      }
+    }
   }
 
   revalidatePath("/dashboard");
