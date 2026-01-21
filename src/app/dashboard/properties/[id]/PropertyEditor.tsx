@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { toast } from "sonner";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -41,15 +42,25 @@ type TabId = (typeof tabs)[number]["id"];
 
 interface PropertyEditorProps {
   property: DbProperty;
+  showDuplicatedToast?: boolean;
 }
 
-export function PropertyEditor({ property }: PropertyEditorProps) {
+export function PropertyEditor({ property, showDuplicatedToast }: PropertyEditorProps) {
   const [activeTab, setActiveTab] = useState<TabId>("basic");
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
     "idle"
   );
   const [isPending, startTransition] = useTransition();
   const [showMenu, setShowMenu] = useState(false);
+
+  // Show toast when property was just duplicated
+  useEffect(() => {
+    if (showDuplicatedToast) {
+      toast.success("Property duplicated successfully");
+      // Remove the query param from URL without triggering a reload
+      window.history.replaceState({}, "", `/dashboard/properties/${property.id}`);
+    }
+  }, [showDuplicatedToast, property.id]);
 
   const handleSave = async (formData: FormData) => {
     setSaveStatus("saving");

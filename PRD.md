@@ -171,7 +171,7 @@ Tent Card:                      Wall Sign:
 - [x] Copies all content: Wi-Fi networks, rules, appliances, sections, emergency contacts
 - [x] New property starts as Draft (unpublished)
 - [x] User redirected to new property editor after duplication
-- [ ] Confirmation toast: "Property duplicated successfully"
+- [x] Confirmation toast: "Property duplicated successfully"
 
 ---
 

@@ -32,6 +32,11 @@
   - Created new client component: src/components/dashboard/PropertyCard.tsx
   - PropertyCard now has ⋮ menu with Duplicate and Delete options
   - User redirected to new property editor after duplication
+  - Confirmation toast shown on new property page (2026-01-21)
+    - Modified `duplicateProperty` action to redirect with `?duplicated=true` query param
+    - Added `showDuplicatedToast` prop to PropertyEditor component
+    - Uses sonner toast library (already configured in app layout)
+    - URL cleaned up after toast is shown using `history.replaceState`
 
 ## Next Tasks
 - [ ] Live Preview Side-by-Side (Phase 3)

@@ -427,5 +427,5 @@ export async function duplicateProperty(id: string) {
   }
 
   revalidatePath("/dashboard");
-  redirect(`/dashboard/properties/${newProperty.id}`);
+  redirect(`/dashboard/properties/${newProperty.id}?duplicated=true`);
 }
