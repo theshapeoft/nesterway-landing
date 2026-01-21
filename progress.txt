@@ -66,8 +66,26 @@
     - Reset Password page: src/app/(auth)/reset-password/page.tsx
     - Change Password page: src/app/dashboard/account/page.tsx (PasswordTab)
 
+- [x] **Google OAuth Login** (2026-01-21)
+  - Created GoogleButton component: src/components/auth/GoogleButton.tsx
+    - Reusable component with mode prop ("signin" | "signup")
+    - Uses Supabase Auth signInWithOAuth for Google provider
+    - Includes Google "G" logo SVG icon
+    - Loading state with spinner
+  - Added "Continue with Google" / "Sign up with Google" buttons:
+    - Login page: src/app/(auth)/login/page.tsx
+    - Signup page: src/app/(auth)/signup/page.tsx
+    - Styled with divider "or" between OAuth and email/password forms
+  - Added "Connections" tab to Account Settings page:
+    - src/app/dashboard/account/page.tsx
+    - Shows connected Google account status with email
+    - "Connect" button to link Google account (uses supabase.auth.linkIdentity)
+    - "Disconnect" button to unlink (uses supabase.auth.unlinkIdentity)
+    - Safety check: prevents disconnecting if it's the only login method
+  - Uses existing /auth/callback route for OAuth code exchange
+  - Exported GoogleButton from src/components/auth/index.ts
+
 ## Next Tasks
-- [ ] Google OAuth Login (Phase 4)
 - [ ] Rich Text Formatting (Phase 5)
 - [ ] Property Templates (Phase 5)
 - [ ] Analytics Events Integration (Phase 5)

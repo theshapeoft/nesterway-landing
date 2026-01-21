@@ -238,12 +238,12 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host, I want to sign up and log in with my Google account, so that I don't need to remember another password.
 
 **Acceptance Criteria:**
-- [ ] "Continue with Google" button on signup page
-- [ ] "Continue with Google" button on login page
-- [ ] Uses Supabase Auth Google provider
-- [ ] On first OAuth login, creates account and redirects to dashboard
-- [ ] On subsequent logins, signs in and redirects to dashboard
-- [ ] Existing email/password users can link Google account in settings
+- [x] "Continue with Google" button on signup page
+- [x] "Continue with Google" button on login page
+- [x] Uses Supabase Auth Google provider
+- [x] On first OAuth login, creates account and redirects to dashboard
+- [x] On subsequent logins, signs in and redirects to dashboard
+- [x] Existing email/password users can link Google account in settings
 
 **Design:**
 ```

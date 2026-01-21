@@ -9,6 +9,7 @@ import {
   PasswordInput,
   SubmitButton,
   AlertMessage,
+  GoogleButton,
 } from "@/components/auth";
 import { createClient } from "@/lib/supabase/client";
 
@@ -103,8 +104,22 @@ function LoginForm() {
       title="Welcome back"
       description="Log in to manage your properties."
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-4">
         {error && <AlertMessage type="error" message={error} />}
+
+        <GoogleButton mode="signin" redirectTo={redirectTo} disabled={isLoading} />
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-card px-2 text-muted-foreground">or</span>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mt-4 space-y-4">
 
         <FormField
           label="Email Address"

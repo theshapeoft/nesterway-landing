@@ -9,6 +9,7 @@ import {
   PasswordInput,
   SubmitButton,
   AlertMessage,
+  GoogleButton,
 } from "@/components/auth";
 import { signupWithEmail } from "@/lib/actions/auth";
 
@@ -91,8 +92,22 @@ export default function SignupPage() {
       title="Create your account"
       description="Join Travelama and create digital manuals for your rental properties."
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-4">
         {error && <AlertMessage type="error" message={error} />}
+
+        <GoogleButton mode="signup" disabled={isLoading} />
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-card px-2 text-muted-foreground">or</span>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mt-4 space-y-4">
 
         <FormField
           label="Full Name"
