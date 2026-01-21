@@ -5,3 +5,4 @@ export { EmergencyModal } from "./EmergencyModal";
 export { PropertySections } from "./PropertySections";
 export { ExploreCTA } from "./ExploreCTA";
 export { BottomNavigation } from "./BottomNavigation";
+export { OfflineIndicator, OfflineBadge } from "./OfflineIndicator";

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {

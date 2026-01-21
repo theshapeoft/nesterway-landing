@@ -307,11 +307,11 @@ Fair · Add uppercase letter
 **User Story:** As a guest, I want critical property info (Wi-Fi, emergency contacts) to work offline, so that I can access it even with poor connectivity.
 
 **Acceptance Criteria:**
-- [ ] Service worker caches property page on first visit
-- [ ] Offline indicator shown when connection lost
-- [ ] Cached data: Wi-Fi credentials, emergency contacts, house rules
-- [ ] Cache invalidation when property updated (via ETag or version)
-- [ ] Works on: `/stay/[slug]` pages only
+- [x] Service worker caches property page on first visit
+- [x] Offline indicator shown when connection lost
+- [x] Cached data: Wi-Fi credentials, emergency contacts, house rules
+- [x] Cache invalidation when property updated (via ETag or version)
+- [x] Works on: `/stay/[slug]` pages only
 
 **Technical Notes:**
 - Use `next-pwa` or custom service worker

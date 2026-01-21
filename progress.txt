@@ -164,5 +164,37 @@
     - src/content/properties/sliema-sanctuary.ts
   - Created DashboardTracker client component for server-rendered dashboard
 
-## Next Tasks
-- [ ] Offline Caching for Guest Pages (Phase 6)
+### Phase 6: Performance
+- [x] **Offline Caching for Guest Pages** (2026-01-21)
+  - Created custom service worker: public/sw.js
+    - Caches property pages on first visit using Cache API
+    - Handles static assets (JS, CSS, images) with cache-first strategy
+    - Caches property data to localStorage as backup
+    - Cache invalidation using property ID as version
+  - Created offline indicator component: src/components/property/OfflineIndicator.tsx
+    - Shows amber banner when offline with cached data available
+    - Shows red banner when offline without cached data
+    - Uses Phosphor icons (CloudCheck, CloudSlash)
+    - Exported OfflineBadge for compact use in headers
+  - Created useOffline hook: src/hooks/useOffline.ts
+    - Tracks online/offline status via navigator.onLine and events
+    - Registers service worker on mount
+    - Caches property data to localStorage (7-day expiry)
+    - Sends property data to service worker for Cache API storage
+    - Exports utility functions: getCacheVersion, clearPropertyCache, clearAllPropertyCaches
+  - Created hooks index: src/hooks/index.ts
+  - Created PWA manifest: public/manifest.json
+    - App name, icons, theme colors, standalone display mode
+  - Created offline fallback page: public/offline.html
+    - Friendly "You're offline" message with retry button
+    - Shows notice if cached property data is available
+  - Created placeholder PWA icons: public/icons/icon-192.svg, icon-512.svg
+  - Updated PropertyPageClient: src/app/stay/[slug]/PropertyPageClient.tsx
+    - Integrated useOffline hook to cache property data on visit
+    - Added OfflineIndicator component to show offline status
+  - Updated root layout: src/app/layout.tsx
+    - Added manifest.json link in metadata
+  - Works only on /stay/[slug] guest pages as specified
+
+## PRD Status
+All features in the PRD have been implemented. The project is complete.

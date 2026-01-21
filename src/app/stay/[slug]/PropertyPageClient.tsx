@@ -8,11 +8,13 @@ import {
   EmergencyModal,
   PropertySections,
   BottomNavigation,
+  OfflineIndicator,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property } from "@/types";
 import type { NavTab } from "@/components/property/BottomNavigation";
 import { track } from "@/lib/analytics";
+import { useOffline } from "@/hooks";
 
 interface PropertyPageClientProps {
   property: Property;
@@ -23,6 +25,7 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<NavTab>("home");
   const { toast, showToast, hideToast } = useToast();
+  const { isOffline, hasCachedData } = useOffline(property);
 
   // Track page view on mount (this represents a QR scan or direct visit)
   useEffect(() => {
@@ -47,6 +50,12 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        isOffline={isOffline}
+        hasCachedData={hasCachedData(property.slug)}
+      />
+
       {/* Hero Header */}
       <PropertyHeader
         name={property.name}
