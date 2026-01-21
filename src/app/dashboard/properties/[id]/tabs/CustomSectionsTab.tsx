@@ -22,6 +22,7 @@ import { SortableList } from "@/components/dashboard/SortableList";
 
 interface CustomSectionsTabProps {
   propertyId: string;
+  onDataChange?: () => void;
 }
 
 interface CustomSection {
@@ -53,7 +54,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   coffee: Coffee,
 };
 
-export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
+export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTabProps) {
   const [sections, setSections] = useState<CustomSection[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -98,6 +99,7 @@ export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
       });
       await fetchSections();
       setIsAdding(false);
+      onDataChange?.();
     });
   };
 
@@ -118,6 +120,7 @@ export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
         .eq("id", id);
       await fetchSections();
       setEditingId(null);
+      onDataChange?.();
     });
   };
 
@@ -126,6 +129,7 @@ export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
     startTransition(async () => {
       await supabase.from("property_sections").delete().eq("id", id);
       await fetchSections();
+      onDataChange?.();
     });
   };
 
@@ -140,6 +144,7 @@ export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
         .update({ is_visible: !currentVisibility })
         .eq("id", id);
       await fetchSections();
+      onDataChange?.();
     });
   };
 
@@ -158,6 +163,7 @@ export function CustomSectionsTab({ propertyId }: CustomSectionsTabProps) {
             .eq("id", section.id)
         )
       );
+      onDataChange?.();
     });
   };
 

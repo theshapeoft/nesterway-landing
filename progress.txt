@@ -38,8 +38,22 @@
     - Uses sonner toast library (already configured in app layout)
     - URL cleaned up after toast is shown using `history.replaceState`
 
+### Phase 3: Desktop Enhancement
+- [x] **Live Preview Side-by-Side** (2026-01-21)
+  - Created PreviewPanel component (src/app/dashboard/properties/[id]/PreviewPanel.tsx)
+  - Renders guest view components (PropertyHeader, QuickAccessBar, PropertySections) in mobile device mockup
+  - Desktop only (≥1024px): Split-screen with editor (50%) left, preview (50%) right
+  - Smooth transition animations with duration-300
+  - Toggle button in header to show/hide preview panel
+  - Mobile/tablet: Preview button opens guest page in new tab
+  - Created fetchPropertyForPreview utility (src/lib/utils/property-preview.ts)
+  - Fetches and transforms property data with related tables (wifi, emergency, sections)
+  - Preview updates debounced at 500ms as user edits
+  - All tabs wired up with onDataChange callback to trigger preview refresh
+  - Refresh button with loading spinner in preview header
+  - Close button to hide preview panel
+
 ## Next Tasks
-- [ ] Live Preview Side-by-Side (Phase 3)
 - [ ] Password Strength Indicator (Phase 4)
 - [ ] Google OAuth Login (Phase 4)
 - [ ] Rich Text Formatting (Phase 5)

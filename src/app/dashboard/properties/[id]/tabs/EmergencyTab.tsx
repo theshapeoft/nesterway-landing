@@ -15,9 +15,10 @@ interface EmergencyContact {
 
 interface EmergencyTabProps {
   propertyId: string;
+  onDataChange?: () => void;
 }
 
-export function EmergencyTab({ propertyId }: EmergencyTabProps) {
+export function EmergencyTab({ propertyId, onDataChange }: EmergencyTabProps) {
   const [contact, setContact] = useState<EmergencyContact | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -63,6 +64,7 @@ export function EmergencyTab({ propertyId }: EmergencyTabProps) {
       }
       await fetchContact();
       setIsEditing(false);
+      onDataChange?.();
     });
   };
 

@@ -18,9 +18,10 @@ interface WifiNetwork {
 
 interface WifiTabProps {
   propertyId: string;
+  onDataChange?: () => void;
 }
 
-export function WifiTab({ propertyId }: WifiTabProps) {
+export function WifiTab({ propertyId, onDataChange }: WifiTabProps) {
   const [networks, setNetworks] = useState<WifiNetwork[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
@@ -60,6 +61,7 @@ export function WifiTab({ propertyId }: WifiTabProps) {
       });
       await fetchNetworks();
       setIsAdding(false);
+      onDataChange?.();
     });
   };
 
@@ -68,6 +70,7 @@ export function WifiTab({ propertyId }: WifiTabProps) {
     startTransition(async () => {
       await supabase.from("wifi_networks").delete().eq("id", id);
       await fetchNetworks();
+      onDataChange?.();
     });
   };
 
@@ -82,6 +85,7 @@ export function WifiTab({ propertyId }: WifiTabProps) {
       // Set selected as primary
       await supabase.from("wifi_networks").update({ is_primary: true }).eq("id", id);
       await fetchNetworks();
+      onDataChange?.();
     });
   };
 
@@ -110,6 +114,7 @@ export function WifiTab({ propertyId }: WifiTabProps) {
             .eq("id", network.id)
         )
       );
+      onDataChange?.();
     });
   };
 

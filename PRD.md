@@ -152,11 +152,11 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host on desktop, I want to see a live preview of my property page alongside the editor, so that I can see changes in real-time without switching tabs.
 
 **Acceptance Criteria:**
-- [ ] Desktop only (≥1024px): Split-screen view with editor left, preview right
-- [ ] Preview updates as user types (debounced 500ms)
-- [ ] Toggle button to show/hide preview panel
-- [ ] Preview uses iframe or component rendering of guest view
-- [ ] Mobile/tablet: Keep existing "Preview" button that opens new tab
+- [x] Desktop only (≥1024px): Split-screen view with editor left, preview right
+- [x] Preview updates as user types (debounced 500ms)
+- [x] Toggle button to show/hide preview panel
+- [x] Preview uses iframe or component rendering of guest view
+- [x] Mobile/tablet: Keep existing "Preview" button that opens new tab
 
 ---
 

@@ -161,7 +161,7 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
     const qrContent = svg.innerHTML;
 
     // Build SVG with text
-    let yOffset = padding + targetSize + Math.round(padding * 0.8) + baseFontSize;
+    const yOffset = padding + targetSize + Math.round(padding * 0.8) + baseFontSize;
 
     let svgContent = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}">

@@ -9,6 +9,7 @@ import { SortableList } from "@/components/dashboard/SortableList";
 
 interface RulesTabProps {
   propertyId: string;
+  onDataChange?: () => void;
 }
 
 interface Rule {
@@ -29,7 +30,7 @@ const suggestedRules = [
   "Maximum 4 guests",
 ];
 
-export function RulesTab({ propertyId }: RulesTabProps) {
+export function RulesTab({ propertyId, onDataChange }: RulesTabProps) {
   const [rulesSection, setRulesSection] = useState<RulesSection | null>(null);
   const [rules, setRules] = useState<Rule[]>([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -83,6 +84,7 @@ export function RulesTab({ propertyId }: RulesTabProps) {
     startTransition(async () => {
       await saveRules(newRules);
       setIsAdding(false);
+      onDataChange?.();
     });
   };
 
@@ -90,6 +92,7 @@ export function RulesTab({ propertyId }: RulesTabProps) {
     const newRules = [...rules, { text: ruleText, severity: "normal" as const }];
     startTransition(async () => {
       await saveRules(newRules);
+      onDataChange?.();
     });
   };
 
@@ -97,6 +100,7 @@ export function RulesTab({ propertyId }: RulesTabProps) {
     const newRules = rules.filter((_, i) => i !== index);
     startTransition(async () => {
       await saveRules(newRules);
+      onDataChange?.();
     });
   };
 
@@ -108,6 +112,7 @@ export function RulesTab({ propertyId }: RulesTabProps) {
     };
     startTransition(async () => {
       await saveRules(newRules);
+      onDataChange?.();
     });
   };
 
@@ -121,6 +126,7 @@ export function RulesTab({ propertyId }: RulesTabProps) {
     setRules(newRules);
     startTransition(async () => {
       await saveRules(newRules);
+      onDataChange?.();
     });
   };
 

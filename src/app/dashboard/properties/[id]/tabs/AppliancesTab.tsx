@@ -9,6 +9,7 @@ import { SortableList } from "@/components/dashboard/SortableList";
 
 interface AppliancesTabProps {
   propertyId: string;
+  onDataChange?: () => void;
 }
 
 interface Appliance {
@@ -32,7 +33,7 @@ const suggestedAppliances = [
   "Heating",
 ];
 
-export function AppliancesTab({ propertyId }: AppliancesTabProps) {
+export function AppliancesTab({ propertyId, onDataChange }: AppliancesTabProps) {
   const [appliancesSection, setAppliancesSection] =
     useState<AppliancesSection | null>(null);
   const [appliances, setAppliances] = useState<Appliance[]>([]);
@@ -91,6 +92,7 @@ export function AppliancesTab({ propertyId }: AppliancesTabProps) {
     startTransition(async () => {
       await saveAppliances(newAppliances);
       setIsAdding(false);
+      onDataChange?.();
     });
   };
 
@@ -104,6 +106,7 @@ export function AppliancesTab({ propertyId }: AppliancesTabProps) {
     const newAppliances = appliances.filter((_, i) => i !== index);
     startTransition(async () => {
       await saveAppliances(newAppliances);
+      onDataChange?.();
     });
   };
 
@@ -120,6 +123,7 @@ export function AppliancesTab({ propertyId }: AppliancesTabProps) {
     setAppliances(newAppliances);
     startTransition(async () => {
       await saveAppliances(newAppliances);
+      onDataChange?.();
     });
   };
 
