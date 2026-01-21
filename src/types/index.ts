@@ -42,6 +42,7 @@ export interface PropertySection {
 }
 
 export interface Property {
+  id: string;
   slug: string;
   name: string;
   areaSlug: string;

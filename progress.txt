@@ -139,6 +139,30 @@
     - Studio: 4 rules, 3 appliances, 1 custom section (Space Tips)
     - Blank: No pre-filled content (start from scratch)
 
+- [x] **Analytics Events Integration** (2026-01-21)
+  - Created analytics utility module: src/lib/analytics/index.ts
+    - `track(eventName, data)`: Main tracking function with type-safe events
+    - `trackEvent(event)`: Alternative API accepting event object
+    - `identifyUser(userId, traits)`: User identification for analytics
+    - `resetUser()`: Reset identity on logout
+  - TypeScript types for all event types with discriminated unions
+  - Console logging in development mode (purple styled logs)
+  - Ready for analytics provider integration (commented examples for PostHog, Mixpanel, Amplitude)
+  - Events integrated across the application:
+    - Dashboard: `dashboard_viewed` with property_count
+    - Property: `property_edited`, `property_published`, `property_unpublished`, `property_deleted`
+    - Preview: `preview_toggled`, `preview_opened`
+    - QR Code: `qr_downloaded` (format, size), `qr_template_downloaded`, `qr_link_copied`
+    - Guest page: `property_viewed`, `wifi_copied`
+    - Auth: `login_started/completed/failed`, `signup_started/completed/failed`, `logout`
+    - Password reset: `password_reset_requested`, `password_reset_completed`
+    - Google OAuth: tracking via GoogleButton component
+  - Added `id` field to Property type in src/types/index.ts
+  - Updated property loaders to include id:
+    - src/lib/content/properties.ts
+    - src/lib/utils/property-preview.ts
+    - src/content/properties/sliema-sanctuary.ts
+  - Created DashboardTracker client component for server-rendered dashboard
+
 ## Next Tasks
-- [ ] Analytics Events Integration (Phase 5)
 - [ ] Offline Caching for Guest Pages (Phase 6)

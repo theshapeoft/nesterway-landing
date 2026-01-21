@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Compass, ChevronDown, User, Settings, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { track, resetUser } from "@/lib/analytics";
 
 interface DashboardHeaderProps {
   user: SupabaseUser;
@@ -18,6 +19,8 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   const userName = user.user_metadata?.full_name || user.email?.split("@")[0] || "User";
 
   const handleLogout = async () => {
+    track("logout", {});
+    resetUser();
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/");

@@ -51,6 +51,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
 
   // Transform to Property type
   const property: Property = {
+    id: dbProperty.id,
     slug: dbProperty.slug,
     name: dbProperty.name,
     areaSlug: dbProperty.area_slug || "",

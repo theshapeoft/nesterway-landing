@@ -4,6 +4,7 @@ import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 import { getProperties } from "@/lib/actions/properties";
 import { PropertyCard } from "@/components/dashboard/PropertyCard";
+import { DashboardTracker } from "@/components/dashboard/DashboardTracker";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -16,6 +17,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
+      <DashboardTracker propertyCount={properties.length} />
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

@@ -58,6 +58,7 @@ export async function fetchPropertyForPreview(
 
   // Transform to Property type
   const property: Property = {
+    id: dbProperty.id,
     slug: dbProperty.slug,
     name: dbProperty.name,
     areaSlug: dbProperty.area_slug || "",

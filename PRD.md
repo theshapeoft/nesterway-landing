@@ -286,8 +286,8 @@ Fair · Add uppercase letter
 **User Story:** As the product team, we want to track user behavior events, so that we can measure feature adoption and improve the product.
 
 **Acceptance Criteria:**
-- [ ] Event tracking utility function created
-- [ ] Events tracked:
+- [x] Event tracking utility function created
+- [x] Events tracked:
   - `dashboard_viewed` (property_count)
   - `property_created` (property_id)
   - `property_edited` (property_id, section)
@@ -297,8 +297,8 @@ Fair · Add uppercase letter
   - `preview_opened` (property_id)
   - `qr_scan` (property_id, timestamp)
   - Auth events: `signup_*`, `login_*`, `logout`, `password_reset_*`
-- [ ] Console logging in development
-- [ ] Ready for analytics provider integration (Posthog, Mixpanel, etc.)
+- [x] Console logging in development
+- [x] Ready for analytics provider integration (Posthog, Mixpanel, etc.)
 
 ---
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 interface GoogleButtonProps {
   mode: "signin" | "signup";
@@ -51,6 +52,8 @@ export function GoogleButton({
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
+    const eventType = mode === "signin" ? "login" : "signup";
+    track(`${eventType}_started` as "login_started" | "signup_started", { method: "google" });
 
     try {
       const supabase = createClient();
@@ -64,11 +67,14 @@ export function GoogleButton({
 
       if (error) {
         console.error("Google OAuth error:", error.message);
+        track(`${eventType}_failed` as "login_failed" | "signup_failed", { method: "google", error: error.message });
         setIsLoading(false);
       }
       // If successful, user will be redirected to Google
+      // The completed event will be tracked in the auth callback
     } catch (err) {
       console.error("Unexpected error during Google auth:", err);
+      track(`${eventType}_failed` as "login_failed" | "signup_failed", { method: "google", error: "unexpected_error" });
       setIsLoading(false);
     }
   };

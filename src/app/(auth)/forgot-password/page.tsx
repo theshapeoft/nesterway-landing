@@ -10,6 +10,7 @@ import {
   AlertMessage,
 } from "@/components/auth";
 import { sendPasswordReset } from "@/lib/actions/auth";
+import { track } from "@/lib/analytics";
 
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +45,7 @@ export default function ForgotPasswordPage() {
     try {
       const redirectTo = `${window.location.origin}/reset-password`;
       await sendPasswordReset(email, redirectTo);
+      track("password_reset_requested", { email });
 
       // Always show success to prevent email enumeration
       setSuccess(true);

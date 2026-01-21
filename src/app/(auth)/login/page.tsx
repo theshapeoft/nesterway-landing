@@ -12,6 +12,7 @@ import {
   GoogleButton,
 } from "@/components/auth";
 import { createClient } from "@/lib/supabase/client";
+import { track, identifyUser } from "@/lib/analytics";
 
 function LoginForm() {
   const router = useRouter();
@@ -63,11 +64,12 @@ function LoginForm() {
     }
 
     setIsLoading(true);
+    track("login_started", { method: "email" });
 
     try {
       const supabase = createClient();
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
@@ -78,6 +80,7 @@ function LoginForm() {
           signInError.message.includes("invalid")
         ) {
           setError("Invalid email or password. Please try again.");
+          track("login_failed", { method: "email", error: "invalid_credentials" });
         } else if (signInError.message.includes("Email not confirmed")) {
           router.push(
             `/verify-email?email=${encodeURIComponent(formData.email)}`
@@ -85,15 +88,21 @@ function LoginForm() {
           return;
         } else {
           setError(signInError.message);
+          track("login_failed", { method: "email", error: signInError.message });
         }
         return;
       }
 
-      // Successful login - redirect
+      // Successful login - identify user and redirect
+      if (data.user) {
+        identifyUser(data.user.id, { email: data.user.email });
+        track("login_completed", { method: "email", user_id: data.user.id });
+      }
       router.push(redirectTo);
       router.refresh();
     } catch {
       setError("An unexpected error occurred. Please try again.");
+      track("login_failed", { method: "email", error: "unexpected_error" });
     } finally {
       setIsLoading(false);
     }

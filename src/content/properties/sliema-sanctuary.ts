@@ -1,6 +1,7 @@
 import type { Property } from "@/types";
 
 export const sliemaSanctuary: Property = {
+  id: "static-sliema-sanctuary",
   slug: "sliema-sanctuary",
   name: "Sliema Sanctuary",
   areaSlug: "sliema",

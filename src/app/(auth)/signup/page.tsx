@@ -12,6 +12,7 @@ import {
   GoogleButton,
 } from "@/components/auth";
 import { signupWithEmail } from "@/lib/actions/auth";
+import { track } from "@/lib/analytics";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function SignupPage() {
     }
 
     setIsLoading(true);
+    track("signup_started", { method: "email" });
 
     try {
       const redirectTo = `${window.location.origin}/auth/callback`;
@@ -75,13 +77,16 @@ export default function SignupPage() {
 
       if (!result.success) {
         setError(result.error || "Failed to create account");
+        track("signup_failed", { method: "email", error: result.error || "unknown" });
         return;
       }
 
       // Redirect to verification pending page
+      track("signup_completed", { method: "email" });
       router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
     } catch {
       setError("An unexpected error occurred. Please try again.");
+      track("signup_failed", { method: "email", error: "unexpected_error" });
     } finally {
       setIsLoading(false);
     }

@@ -11,6 +11,7 @@ import {
   AlertMessage,
 } from "@/components/auth";
 import { createClient } from "@/lib/supabase/client";
+import { track } from "@/lib/analytics";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -86,6 +87,7 @@ function ResetPasswordForm() {
       }
 
       setSuccess(true);
+      track("password_reset_completed", {});
 
       // Redirect to dashboard after a short delay
       setTimeout(() => {

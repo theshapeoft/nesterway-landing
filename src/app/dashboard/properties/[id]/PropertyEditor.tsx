@@ -22,6 +22,7 @@ import {
   duplicateProperty,
   type DbProperty,
 } from "@/lib/actions/properties";
+import { track } from "@/lib/analytics";
 import { BasicInfoTab } from "./tabs/BasicInfoTab";
 import { WifiTab } from "./tabs/WifiTab";
 import { RulesTab } from "./tabs/RulesTab";
@@ -102,6 +103,7 @@ export function PropertyEditor({
     startTransition(async () => {
       await updateProperty(property.id, formData);
       setSaveStatus("saved");
+      track("property_edited", { property_id: property.id, section: activeTab });
       setTimeout(() => setSaveStatus("idle"), 2000);
       // Trigger preview refresh after save
       triggerPreviewRefresh();
@@ -113,6 +115,11 @@ export function PropertyEditor({
       const newStatus =
         property.status === "published" ? "draft" : "published";
       await updatePropertyStatus(property.id, newStatus);
+      if (newStatus === "published") {
+        track("property_published", { property_id: property.id });
+      } else {
+        track("property_unpublished", { property_id: property.id });
+      }
     });
   };
 
@@ -123,6 +130,7 @@ export function PropertyEditor({
       )
     ) {
       startTransition(async () => {
+        track("property_deleted", { property_id: property.id });
         await deleteProperty(property.id);
       });
     }
@@ -136,9 +144,12 @@ export function PropertyEditor({
 
   const handlePreviewToggle = () => {
     if (isDesktop) {
-      setShowPreview(!showPreview);
+      const newShowPreview = !showPreview;
+      setShowPreview(newShowPreview);
+      track("preview_toggled", { property_id: property.id, visible: newShowPreview });
     } else {
       // On mobile/tablet, open in new tab
+      track("preview_opened", { property_id: property.id });
       window.open(`/stay/${property.slug}`, "_blank");
     }
   };

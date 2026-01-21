@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   PropertyHeader,
   QuickAccessBar,
@@ -12,6 +12,7 @@ import {
 import { Toast, useToast } from "@/components/ui";
 import type { Property } from "@/types";
 import type { NavTab } from "@/components/property/BottomNavigation";
+import { track } from "@/lib/analytics";
 
 interface PropertyPageClientProps {
   property: Property;
@@ -23,8 +24,14 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   const [activeTab, setActiveTab] = useState<NavTab>("home");
   const { toast, showToast, hideToast } = useToast();
 
+  // Track page view on mount (this represents a QR scan or direct visit)
+  useEffect(() => {
+    track("property_viewed", { property_id: property.id, slug: property.slug });
+  }, [property.id, property.slug]);
+
   const handleWifiCopySuccess = () => {
     showToast("Password copied!", "success");
+    track("wifi_copied", { property_id: property.id });
   };
 
   const handleTabChange = (tab: NavTab) => {

@@ -6,6 +6,7 @@ import { Copy, Check, Download, FileText, Printer } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui";
 import type { DbProperty } from "@/lib/actions/properties";
+import { track } from "@/lib/analytics";
 
 interface QrCodeTabProps {
   property: DbProperty;
@@ -40,6 +41,7 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
   const copyLink = async () => {
     await navigator.clipboard.writeText(propertyUrl);
     setCopied(true);
+    track("qr_link_copied", { property_id: property.id });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -136,12 +138,13 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
         if (blob) {
           const suffix = includeBranding ? "" : "-unbranded";
           downloadBlob(blob, `${property.slug}-qr-${size}${suffix}.png`);
+          track("qr_downloaded", { property_id: property.id, format: "png", size });
         }
       },
       "image/png",
       1.0
     );
-  }, [size, includeBranding, generateQrCanvas, downloadBlob, property.slug]);
+  }, [size, includeBranding, generateQrCanvas, downloadBlob, property.slug, property.id]);
 
   // Download SVG with branding text
   const downloadSVG = useCallback(() => {
@@ -184,7 +187,8 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
     const blob = new Blob([svgContent], { type: "image/svg+xml" });
     const suffix = includeBranding ? "" : "-unbranded";
     downloadBlob(blob, `${property.slug}-qr-${size}${suffix}.svg`);
-  }, [size, includeBranding, property.name, property.slug, propertyUrl, downloadBlob]);
+    track("qr_downloaded", { property_id: property.id, format: "svg", size });
+  }, [size, includeBranding, property.name, property.slug, property.id, propertyUrl, downloadBlob]);
 
   // Download basic PDF
   const downloadPDF = useCallback(async () => {
@@ -236,7 +240,8 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
 
     const suffix = includeBranding ? "" : "-unbranded";
     pdf.save(`${property.slug}-qr${suffix}.pdf`);
-  }, [generateQrCanvas, includeBranding, property.name, property.slug]);
+    track("qr_downloaded", { property_id: property.id, format: "pdf", size: "medium" });
+  }, [generateQrCanvas, includeBranding, property.name, property.slug, property.id]);
 
   // Download tent card template
   const downloadTentCard = useCallback(async () => {
@@ -317,7 +322,8 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
     }
 
     pdf.save(`${property.slug}-tent-card.pdf`);
-  }, [generateQrCanvas, includeBranding, property.name, property.slug]);
+    track("qr_template_downloaded", { property_id: property.id, template: "tent-card" });
+  }, [generateQrCanvas, includeBranding, property.name, property.slug, property.id]);
 
   // Download wall sign template
   const downloadWallSign = useCallback(async () => {
@@ -395,7 +401,8 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
     }
 
     pdf.save(`${property.slug}-wall-sign.pdf`);
-  }, [generateQrCanvas, includeBranding, property.name, property.slug]);
+    track("qr_template_downloaded", { property_id: property.id, template: "wall-sign" });
+  }, [generateQrCanvas, includeBranding, property.name, property.slug, property.id]);
 
   const isPublished = property.status === "published";
 
