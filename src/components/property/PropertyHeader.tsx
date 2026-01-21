@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Phone, EnvelopeSimple, ShareNetwork } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { sanitizeHtml } from "@/components/editor";
 
 interface PropertyHeaderProps {
   name: string;
@@ -142,12 +143,13 @@ export function PropertyHeader({
 
           {/* Welcome Message */}
           {welcomeMessage && (
-            <p
-              className="mt-3 text-sm leading-relaxed text-white/80 line-clamp-2 animate-fade-in"
+            <div
+              className="mt-3 text-sm leading-relaxed text-white/80 line-clamp-2 animate-fade-in prose prose-sm prose-invert max-w-none [&>p]:my-0 [&>ul]:my-0 [&>ol]:my-0"
               style={{ animationDelay: "100ms" }}
-            >
-              {welcomeMessage}
-            </p>
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(welcomeMessage),
+              }}
+            />
           )}
         </div>
       </div>

@@ -201,12 +201,12 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host, I want to format text in my welcome message and custom sections with bold, italic, and lists, so that I can make important information stand out.
 
 **Acceptance Criteria:**
-- [ ] Toolbar with: Bold, Italic, Bullet list, Numbered list
-- [ ] Applies to: Welcome message, Custom section content
-- [ ] Stored as HTML/Markdown in database
-- [ ] Renders correctly on guest property page
-- [ ] Character count accounts for formatting characters
-- [ ] Mobile-friendly toolbar
+- [x] Toolbar with: Bold, Italic, Bullet list, Numbered list
+- [x] Applies to: Welcome message, Custom section content
+- [x] Stored as HTML/Markdown in database
+- [x] Renders correctly on guest property page
+- [x] Character count accounts for formatting characters
+- [x] Mobile-friendly toolbar
 
 **Technical Notes:**
 - Recommend `tiptap` or `lexical` for lightweight rich text

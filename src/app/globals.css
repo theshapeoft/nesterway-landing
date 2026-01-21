@@ -345,3 +345,20 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Tiptap Rich Text Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted-foreground);
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror:focus p.is-editor-empty:first-child::before {
+  content: "";
+}

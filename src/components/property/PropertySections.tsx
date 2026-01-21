@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { cn } from "@/lib/utils";
+import { sanitizeHtml } from "@/components/editor";
 import type { PropertySection, PropertyRule, Appliance } from "@/types";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -96,6 +97,19 @@ function AppliancesList({ appliances }: { appliances: Appliance[] }) {
 }
 
 function StringList({ items }: { items: string[] }) {
+  // Check if content is HTML (new format: single-element array with HTML)
+  if (items.length === 1 && items[0].startsWith("<")) {
+    return (
+      <div
+        className="prose prose-sm max-w-none text-neutral-600 [&>p]:my-1 [&>ul]:my-1 [&>ol]:my-1 [&>ul]:list-disc [&>ul]:pl-4 [&>ol]:list-decimal [&>ol]:pl-4 [&_li]:text-neutral-600"
+        dangerouslySetInnerHTML={{
+          __html: sanitizeHtml(items[0]),
+        }}
+      />
+    );
+  }
+
+  // Legacy format: render as bullet list
   return (
     <ul className="space-y-2">
       {items.map((item, index) => (

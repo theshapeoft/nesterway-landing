@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useTransition, useRef } from "react";
 import {
   Plus,
   FileText,
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui";
 import { FormField } from "@/components/auth/FormField";
 import { createClient } from "@/lib/supabase/client";
 import { SortableList } from "@/components/dashboard/SortableList";
+import { RichTextEditor, htmlToPlainText } from "@/components/editor";
 
 interface CustomSectionsTabProps {
   propertyId: string;
@@ -29,9 +30,22 @@ interface CustomSection {
   id: string;
   title: string;
   icon: string;
-  content: string[];
+  content: string[] | string; // Can be array (legacy) or HTML string (new)
   display_order: number;
   is_visible: boolean;
+}
+
+// Helper to get preview text from content
+function getPreviewText(content: string[] | string): string[] {
+  if (Array.isArray(content)) return content;
+  // Extract text from HTML for preview
+  const text = htmlToPlainText(content);
+  if (!text) return [];
+  // Split by common separators and filter
+  return text
+    .split(/\n|(?<=\.)(?=\s)/g)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 }
 
 const availableIcons = [
@@ -80,13 +94,11 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
     const supabase = createClient();
     const title = formData.get("title") as string;
     const icon = formData.get("icon") as string;
-    const contentText = formData.get("content") as string;
+    const contentHtml = formData.get("content") as string;
 
-    // Split content by newlines into array
-    const content = contentText
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line);
+    // Store as HTML string (wrapped in array for JSONB compatibility)
+    // We store it as a single-element array with the HTML for backwards compatibility
+    const content = contentHtml ? [contentHtml] : [];
 
     startTransition(async () => {
       await supabase.from("property_sections").insert({
@@ -107,11 +119,9 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
     const supabase = createClient();
     const title = formData.get("title") as string;
     const icon = formData.get("icon") as string;
-    const contentText = formData.get("content") as string;
-    const content = contentText
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line);
+    const contentHtml = formData.get("content") as string;
+    // Store as single-element array with HTML for backwards compatibility
+    const content = contentHtml ? [contentHtml] : [];
 
     startTransition(async () => {
       await supabase
@@ -175,69 +185,93 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
     section?: CustomSection;
     onSubmit: (formData: FormData) => void;
     onCancel: () => void;
-  }) => (
-    <form
-      action={onSubmit}
-      className="space-y-4 rounded-xl border bg-card p-4"
-    >
-      <FormField
-        label="Section Title"
-        name="title"
-        type="text"
-        defaultValue={section?.title || ""}
-        placeholder="e.g., Parking Information"
-        required
-      />
+  }) => {
+    const formRef = useRef<HTMLFormElement>(null);
+    const [contentHtml, setContentHtml] = useState(() => {
+      if (!section?.content) return "";
+      // Handle both legacy array format and new HTML format
+      if (Array.isArray(section.content)) {
+        // Check if it's the new format (single element with HTML)
+        if (section.content.length === 1 && section.content[0].startsWith("<")) {
+          return section.content[0];
+        }
+        // Legacy format: convert array to HTML list
+        return `<ul>${section.content.map((item) => `<li>${item}</li>`).join("")}</ul>`;
+      }
+      return section.content;
+    });
 
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-foreground">
-          Icon
-        </label>
-        <select
-          name="icon"
-          defaultValue={section?.icon || "file-text"}
-          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-base"
-        >
-          {availableIcons.map((icon) => (
-            <option key={icon.id} value={icon.id}>
-              {icon.label}
-            </option>
-          ))}
-        </select>
-      </div>
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (formRef.current) {
+        const formData = new FormData(formRef.current);
+        onSubmit(formData);
+      }
+    };
 
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-foreground">
-          Content <span className="text-destructive">*</span>
-        </label>
-        <textarea
-          name="content"
-          defaultValue={section?.content.join("\n") || ""}
-          placeholder="Enter each point on a new line:&#10;Free parking in the garage&#10;Use spot #12&#10;Gate code is 1234"
-          rows={5}
+    return (
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="space-y-4 rounded-xl border bg-card p-4"
+      >
+        <input type="hidden" name="content" value={contentHtml} />
+        <FormField
+          label="Section Title"
+          name="title"
+          type="text"
+          defaultValue={section?.title || ""}
+          placeholder="e.g., Parking Information"
           required
-          className="w-full resize-y rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <p className="text-xs text-muted-foreground">
-          Each line becomes a bullet point in the section
-        </p>
-      </div>
 
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onCancel}
-          disabled={isPending}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" variant="accent" disabled={isPending}>
-          {section ? "Save Changes" : "Add Section"}
-        </Button>
-      </div>
-    </form>
-  );
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">
+            Icon
+          </label>
+          <select
+            name="icon"
+            defaultValue={section?.icon || "file-text"}
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-base"
+          >
+            {availableIcons.map((icon) => (
+              <option key={icon.id} value={icon.id}>
+                {icon.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">
+            Content <span className="text-destructive">*</span>
+          </label>
+          <RichTextEditor
+            content={contentHtml}
+            onChange={setContentHtml}
+            placeholder="Add your section content here. Use bullet or numbered lists to organize information."
+          />
+          <p className="text-xs text-muted-foreground">
+            Use formatting to highlight important information
+          </p>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onCancel}
+            disabled={isPending}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" variant="accent" disabled={isPending}>
+            {section ? "Save Changes" : "Add Section"}
+          </Button>
+        </div>
+      </form>
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -314,21 +348,7 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
                         </span>
                       )}
                     </div>
-                    <ul className="mt-2 space-y-1">
-                      {section.content.slice(0, 3).map((item, idx) => (
-                        <li
-                          key={idx}
-                          className="text-sm text-muted-foreground"
-                        >
-                          • {item}
-                        </li>
-                      ))}
-                      {section.content.length > 3 && (
-                        <li className="text-sm text-muted-foreground">
-                          ... and {section.content.length - 3} more
-                        </li>
-                      )}
-                    </ul>
+                    <ContentPreview content={section.content} />
                   </div>
                   <div className="flex items-center gap-1">
                     <Button
@@ -395,21 +415,7 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
                         </span>
                       )}
                     </div>
-                    <ul className="mt-2 space-y-1">
-                      {section.content.slice(0, 3).map((item, idx) => (
-                        <li
-                          key={idx}
-                          className="text-sm text-muted-foreground"
-                        >
-                          • {item}
-                        </li>
-                      ))}
-                      {section.content.length > 3 && (
-                        <li className="text-sm text-muted-foreground">
-                          ... and {section.content.length - 3} more
-                        </li>
-                      )}
-                    </ul>
+                    <ContentPreview content={section.content} />
                   </div>
                   <div className="flex items-center gap-1">
                     <Button
@@ -451,5 +457,31 @@ export function CustomSectionsTab({ propertyId, onDataChange }: CustomSectionsTa
         />
       )}
     </div>
+  );
+}
+
+// Helper component to render content preview
+function ContentPreview({ content }: { content: string[] | string }) {
+  const previewItems = getPreviewText(content);
+
+  if (previewItems.length === 0) {
+    return (
+      <p className="mt-2 text-sm text-muted-foreground italic">No content</p>
+    );
+  }
+
+  return (
+    <ul className="mt-2 space-y-1">
+      {previewItems.slice(0, 3).map((item, idx) => (
+        <li key={idx} className="text-sm text-muted-foreground">
+          • {item}
+        </li>
+      ))}
+      {previewItems.length > 3 && (
+        <li className="text-sm text-muted-foreground">
+          ... and {previewItems.length - 3} more
+        </li>
+      )}
+    </ul>
   );
 }

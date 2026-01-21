@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { FormField } from "@/components/auth/FormField";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
+import { RichTextEditor, plainTextToHtml } from "@/components/editor";
 import type { DbProperty } from "@/lib/actions/properties";
 
 interface BasicInfoTabProps {
@@ -18,6 +19,10 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
   );
   const [heroImageUrl, setHeroImageUrl] = useState<string | null>(
     property.hero_image_url || null
+  );
+  const [welcomeMessage, setWelcomeMessage] = useState<string>(
+    // Convert plain text to HTML if needed for backwards compatibility
+    plainTextToHtml(property.welcome_message || "")
   );
 
   const handleChange = () => {
@@ -61,11 +66,26 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
     setTimeout(triggerSave, 0);
   };
 
+  const handleWelcomeMessageChange = useCallback((html: string) => {
+    setWelcomeMessage(html);
+    // Debounce auto-save
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(() => {
+      if (formRef.current) {
+        const formData = new FormData(formRef.current);
+        onSave(formData);
+      }
+    }, 500);
+  }, [onSave]);
+
   return (
     <form ref={formRef} onChange={handleChange} className="space-y-6">
-      {/* Hidden inputs for image URLs */}
+      {/* Hidden inputs for image URLs and welcome message */}
       <input type="hidden" name="host_photo_url" value={hostPhotoUrl || ""} />
       <input type="hidden" name="hero_image_url" value={heroImageUrl || ""} />
+      <input type="hidden" name="welcome_message" value={welcomeMessage || ""} />
       <FormField
         label="Property Name"
         name="name"
@@ -75,23 +95,17 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
       />
 
       <div className="space-y-2">
-        <label
-          htmlFor="welcome_message"
-          className="block text-sm font-medium text-foreground"
-        >
+        <label className="block text-sm font-medium text-foreground">
           Welcome Message
         </label>
-        <textarea
-          id="welcome_message"
-          name="welcome_message"
-          defaultValue={property.welcome_message || ""}
-          placeholder="Welcome to our home! We're thrilled to have you stay with us..."
-          rows={4}
+        <RichTextEditor
+          content={welcomeMessage}
+          onChange={handleWelcomeMessageChange}
           maxLength={500}
-          className="w-full resize-y rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Welcome to our home! We're thrilled to have you stay with us..."
         />
         <p className="text-xs text-muted-foreground">
-          A personal welcome for your guests
+          A personal welcome for your guests. Use formatting to highlight important info.
         </p>
       </div>
 

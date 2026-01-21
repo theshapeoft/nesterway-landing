@@ -85,8 +85,37 @@
   - Uses existing /auth/callback route for OAuth code exchange
   - Exported GoogleButton from src/components/auth/index.ts
 
+### Phase 5: Content & Analytics
+- [x] **Rich Text Formatting** (2026-01-21)
+  - Created RichTextEditor component: src/components/editor/RichTextEditor.tsx
+    - Built using @tiptap/react with StarterKit extension
+    - Toolbar with Bold, Italic, Bullet list, Numbered list buttons
+    - Character count display with configurable max length
+    - Placeholder support
+    - Mobile-friendly toolbar using Phosphor icons
+  - Utility functions exported from src/components/editor/index.ts:
+    - `sanitizeHtml`: XSS protection using isomorphic-dompurify
+    - `plainTextToHtml`: Backwards compatibility for existing plain text content
+    - `htmlToPlainText`: Extract plain text from HTML for previews
+  - Updated BasicInfoTab (src/app/dashboard/properties/[id]/tabs/BasicInfoTab.tsx):
+    - Replaced textarea with RichTextEditor for welcome message
+    - 500 character limit with live counter
+    - Auto-saves on content change (debounced 500ms)
+  - Updated CustomSectionsTab (src/app/dashboard/properties/[id]/tabs/CustomSectionsTab.tsx):
+    - Replaced textarea with RichTextEditor for section content
+    - Handles both legacy array format and new HTML format
+    - ContentPreview helper component for section card previews
+  - Updated PropertyHeader (src/components/property/PropertyHeader.tsx):
+    - Renders welcome message as sanitized HTML
+    - Prose styling for proper rich text display
+  - Updated PropertySections (src/components/property/PropertySections.tsx):
+    - StringList handles both legacy array and new HTML content
+    - Sanitizes HTML before rendering
+  - Added Tiptap styles to globals.css:
+    - Placeholder styling for empty editor
+  - Installed packages: @tiptap/react, @tiptap/pm, @tiptap/starter-kit, @tiptap/extension-character-count, isomorphic-dompurify
+
 ## Next Tasks
-- [ ] Rich Text Formatting (Phase 5)
 - [ ] Property Templates (Phase 5)
 - [ ] Analytics Events Integration (Phase 5)
 - [ ] Offline Caching for Guest Pages (Phase 6)
