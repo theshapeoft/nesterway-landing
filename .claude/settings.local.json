@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:guide.touchstay.com)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(npx tsc:*)",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "Skill(feature-dev:feature-dev)",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(wc:*)",
+      "Bash(xargs:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

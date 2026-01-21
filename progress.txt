@@ -1,0 +1,43 @@
+# Travelama PRD Implementation Progress
+
+## Completed Tasks
+
+### Phase 1: QR Code Enhancements (Already Implemented)
+- [x] QR Code Download Formats (PNG, SVG, PDF) - Was already implemented
+- [x] QR Code Branding Toggle - Was already implemented
+- [x] Print-Ready Templates (Tent Card, Wall Sign) - Was already implemented
+
+### Phase 2: Dashboard UX
+- [x] **Drag-and-Drop Reordering** (2026-01-21)
+  - Created reusable SortableList component using @dnd-kit
+  - Implemented in: WifiTab, RulesTab, AppliancesTab, CustomSectionsTab
+  - Features: drag handle, keyboard accessibility (up/down buttons), touch support
+  - Installed @dnd-kit/modifiers package
+  - Commit: 8c35986
+
+- [x] **Host Photo Upload** (2026-01-21)
+  - Enhanced ImageUpload component with circular preview mode
+  - Added client-side image resizing using canvas (crops to square, resizes to 200x200)
+  - New props: circular, resizeToSize, previewSize (sm/md/lg)
+  - Updated BasicInfoTab to use circular=true, resizeToSize=200
+  - 80px circular preview in editor, optimized 200x200px uploads
+  - Commit: d426b1d
+
+- [x] **Property Duplication** (2026-01-21)
+  - Created `duplicateProperty` server action in src/lib/actions/properties.ts
+  - Copies all property data: basic info, WiFi networks, emergency contacts, property sections
+  - Creates new property with name "[Original Name] (Copy)" and unique slug
+  - New property starts as Draft status
+  - Added "Duplicate" menu option to PropertyEditor header (⋮ menu)
+  - Created new client component: src/components/dashboard/PropertyCard.tsx
+  - PropertyCard now has ⋮ menu with Duplicate and Delete options
+  - User redirected to new property editor after duplication
+
+## Next Tasks
+- [ ] Live Preview Side-by-Side (Phase 3)
+- [ ] Password Strength Indicator (Phase 4)
+- [ ] Google OAuth Login (Phase 4)
+- [ ] Rich Text Formatting (Phase 5)
+- [ ] Property Templates (Phase 5)
+- [ ] Analytics Events Integration (Phase 5)
+- [ ] Offline Caching for Guest Pages (Phase 6)

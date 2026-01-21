@@ -1,0 +1,15 @@
+{
+  "id": "05a26a79-a99e-48c9-84a8-4096dba8e6dc",
+  "status": "completed",
+  "startedAt": "2026-01-21T18:02:32.232Z",
+  "updatedAt": "2026-01-21T18:24:01.843Z",
+  "agentPlugin": "claude",
+  "trackerPlugin": "json",
+  "prdPath": "./prd.json",
+  "currentIteration": 0,
+  "maxIterations": 10,
+  "totalTasks": 0,
+  "tasksCompleted": 0,
+  "cwd": "/Users/tyrelsmythe/travelama",
+  "endedAt": "2026-01-21T18:24:01.843Z"
+}
