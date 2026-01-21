@@ -261,11 +261,11 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host creating an account, I want to see password strength feedback, so that I can create a secure password.
 
 **Acceptance Criteria:**
-- [ ] 4-segment progress bar below password field
-- [ ] Color-coded levels: Weak (red), Fair (orange), Good (yellow), Strong (green)
-- [ ] Text feedback with suggestions: "Weak · Add uppercase, number"
-- [ ] Requirements: 8+ chars, 1 uppercase, 1 number
-- [ ] Appears on: Signup, Reset Password, Change Password pages
+- [x] 4-segment progress bar below password field
+- [x] Color-coded levels: Weak (red), Fair (orange), Good (yellow), Strong (green)
+- [x] Text feedback with suggestions: "Weak · Add uppercase, number"
+- [x] Requirements: 8+ chars, 1 uppercase, 1 number
+- [x] Appears on: Signup, Reset Password, Change Password pages
 
 **Visual:**
 ```

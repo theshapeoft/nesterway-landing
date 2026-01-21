@@ -53,8 +53,20 @@
   - Refresh button with loading spinner in preview header
   - Close button to hide preview panel
 
+### Phase 4: Authentication & Polish
+- [x] **Password Strength Indicator** (2026-01-21)
+  - Feature was already implemented in PasswordInput component
+  - Component location: src/components/auth/PasswordInput.tsx
+  - `showStrength` prop enables the 4-segment progress bar
+  - Checks: 8+ chars, uppercase letter, number, special character
+  - Color-coded levels: Weak (red), Fair (orange), Good (yellow), Strong (green)
+  - Text feedback with suggestions (e.g., "Fair · Add uppercase letter")
+  - Already enabled on all required pages:
+    - Signup page: src/app/(auth)/signup/page.tsx
+    - Reset Password page: src/app/(auth)/reset-password/page.tsx
+    - Change Password page: src/app/dashboard/account/page.tsx (PasswordTab)
+
 ## Next Tasks
-- [ ] Password Strength Indicator (Phase 4)
 - [ ] Google OAuth Login (Phase 4)
 - [ ] Rich Text Formatting (Phase 5)
 - [ ] Property Templates (Phase 5)
