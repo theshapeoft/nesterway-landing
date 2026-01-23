@@ -58,11 +58,22 @@ export interface Property {
   heroImageUrl?: string;
   checkoutTime: string;
   accessMode: PropertyAccessMode;
+  requireGuestRegistration: boolean;
   wifi: {
     networks: WiFiNetwork[];
   };
   emergencyContact: EmergencyContact;
   sections: PropertySection[];
+}
+
+// Guest registration for forced registration feature
+export interface GuestRegistration {
+  id: string;
+  propertyId: string;
+  fullName: string;
+  email: string;
+  additionalGuests: number;
+  registeredAt: string;
 }
 
 // Area Types

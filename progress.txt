@@ -59,3 +59,82 @@
 ### Notes:
 - Build currently fails due to pre-existing missing embla-carousel-react dependency in landing page components (unrelated to this feature)
 - TypeScript and ESLint pass for all files modified in this feature
+
+---
+
+## 2026-01-23: Implemented Forced Guest Registration (Feature 3.6.2)
+
+### What was done:
+1. Created database migration (`20250123000001_add_guest_registration.sql`):
+   - Added `require_guest_registration` boolean column to properties table (default: false)
+   - Created `guest_registrations` table for storing guest contact info
+   - Added RLS policies for property owners to view/delete registrations
+   - Added policy for guests to insert registrations
+
+2. Updated TypeScript types:
+   - Added `requireGuestRegistration` field to `Property` interface in src/types/index.ts
+   - Added `GuestRegistration` interface for guest registration data
+   - Added `require_guest_registration` field to `DbProperty` interface
+
+3. Updated property data loaders:
+   - src/lib/content/properties.ts - includes requireGuestRegistration in property fetch
+   - src/lib/utils/property-preview.ts - includes requireGuestRegistration in preview data
+
+4. Updated updateProperty server action:
+   - src/lib/actions/properties.ts now handles `require_guest_registration` form field
+   - Also updated duplicateProperty to copy the field
+
+5. Added registration toggle to property settings:
+   - Added "Guest Registration" section to BasicInfoTab.tsx
+   - Checkbox toggle with UserCheck icon
+   - Descriptive text explaining the feature and privacy implications
+   - Auto-saves on change
+
+6. Created GuestRegistrationGate component:
+   - src/components/property/GuestRegistrationGate.tsx
+   - Registration form with full name, email, and additional guests fields
+   - Form validation with helpful error messages
+   - 30-day localStorage persistence to avoid re-registration
+   - Success animation before showing property guide
+   - Privacy policy link
+   - Analytics event tracking for views and registrations
+
+7. Created API route for guest registration:
+   - src/app/api/guest-registration/route.ts
+   - Validates required fields and email format
+   - Verifies property exists and has registration enabled
+   - Captures IP address and user agent for compliance
+   - Inserts registration into database
+
+8. Integrated registration gate into guest property page:
+   - PropertyPageClient.tsx now checks requireGuestRegistration
+   - Shows loading state while checking registration status
+   - Renders GuestRegistrationGate when registration is needed
+   - Calls onRegistrationComplete callback to show property guide
+
+9. Added analytics events:
+   - `guest_registration_viewed` - when registration gate is shown
+   - `guest_registered` - when guest successfully registers
+
+### Files created:
+- supabase/migrations/20250123000001_add_guest_registration.sql
+- src/components/property/GuestRegistrationGate.tsx
+- src/app/api/guest-registration/route.ts
+
+### Files modified:
+- src/types/index.ts
+- src/lib/actions/properties.ts
+- src/lib/content/properties.ts
+- src/lib/utils/property-preview.ts
+- src/lib/analytics/index.ts
+- src/app/dashboard/properties/[id]/tabs/BasicInfoTab.tsx
+- src/app/stay/[slug]/PropertyPageClient.tsx
+- src/components/property/index.ts
+- src/content/properties/sliema-sanctuary.ts
+- PRD.md (marked 3.6.2 acceptance criteria as complete)
+
+### Notes:
+- TypeScript passes for all modified files (pre-existing embla-carousel-react errors remain in landing page)
+- ESLint passes for all modified files
+- Registration data is stored in guest_registrations table for host access/export (Feature 3.6.5)
+- RLS policies ensure only property owners can view registrations for their properties

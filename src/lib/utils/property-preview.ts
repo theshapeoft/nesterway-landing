@@ -72,6 +72,7 @@ export async function fetchPropertyForPreview(
     heroImageUrl: dbProperty.hero_image_url || undefined,
     checkoutTime: formatTime(dbProperty.checkout_time),
     accessMode: (dbProperty.access_mode || "public") as PropertyAccessMode,
+    requireGuestRegistration: dbProperty.require_guest_registration || false,
     wifi: {
       networks: (wifiNetworks || []).map(
         (n): WiFiNetwork => ({

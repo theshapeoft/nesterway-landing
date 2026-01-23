@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { Globe, Lock } from "lucide-react";
+import { Globe, Lock, UserCheck } from "lucide-react";
 import { FormField } from "@/components/auth/FormField";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import { RichTextEditor, plainTextToHtml } from "@/components/editor";
@@ -27,6 +27,9 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
   );
   const [accessMode, setAccessMode] = useState<"public" | "invite_only">(
     property.access_mode || "public"
+  );
+  const [requireGuestRegistration, setRequireGuestRegistration] = useState<boolean>(
+    property.require_guest_registration || false
   );
 
   const handleChange = () => {
@@ -90,6 +93,12 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
     setTimeout(triggerSave, 0);
   };
 
+  const handleRequireRegistrationChange = (value: boolean) => {
+    setRequireGuestRegistration(value);
+    // Trigger save immediately
+    setTimeout(triggerSave, 0);
+  };
+
   return (
     <form ref={formRef} onChange={handleChange} className="space-y-6">
       {/* Hidden inputs for image URLs, welcome message, and access mode */}
@@ -97,6 +106,7 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
       <input type="hidden" name="hero_image_url" value={heroImageUrl || ""} />
       <input type="hidden" name="welcome_message" value={welcomeMessage || ""} />
       <input type="hidden" name="access_mode" value={accessMode} />
+      <input type="hidden" name="require_guest_registration" value={requireGuestRegistration.toString()} />
       <FormField
         label="Property Name"
         name="name"
@@ -242,6 +252,41 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
             </div>
           </label>
         </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="mb-4 font-medium text-foreground">Guest Registration</h3>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Collect guest contact information before they view your guide.
+        </p>
+
+        <label
+          className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${
+            requireGuestRegistration
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
+          }`}
+        >
+          <input
+            type="checkbox"
+            checked={requireGuestRegistration}
+            onChange={(e) => handleRequireRegistrationChange(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+          />
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <UserCheck className="h-4 w-4 text-blue-600" />
+              <span className="font-medium">Require Guest Registration</span>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Guests must provide their name and email before viewing your guide.
+              This allows you to collect contact info for newsletters, updates, or remarketing.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Registration is stored for 30 days. Guest data is handled in compliance with privacy laws.
+            </p>
+          </div>
+        </label>
       </div>
     </form>
   );

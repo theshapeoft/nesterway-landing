@@ -399,17 +399,17 @@ ALTER TABLE properties ADD COLUMN access_mode TEXT DEFAULT 'public'
 **User Story:** As a host, I want to optionally require guests to register before viewing my guide, so I can collect contact information for remarketing.
 
 **Acceptance Criteria:**
-- [ ] Property settings: "Require Guest Registration" toggle (default: OFF)
-- [ ] When enabled, first-time visitors see registration gate
-- [ ] Registration form collects:
+- [x] Property settings: "Require Guest Registration" toggle (default: OFF)
+- [x] When enabled, first-time visitors see registration gate
+- [x] Registration form collects:
   - Full name (required)
   - Email (required)
   - Number of additional guests (optional)
-- [ ] After registration: Immediate guide access
-- [ ] Cookie persists registration for 30 days (no re-entry)
-- [ ] Purpose statement: "This allows the host to collect contact info for newsletters, updates, etc."
-- [ ] Privacy compliance: Link to privacy policy
-- [ ] GDPR compliant: Data stored long-term with user consent
+- [x] After registration: Immediate guide access
+- [x] Cookie persists registration for 30 days (no re-entry)
+- [x] Purpose statement: "This allows the host to collect contact info for newsletters, updates, etc."
+- [x] Privacy compliance: Link to privacy policy
+- [x] GDPR compliant: Data stored long-term with user consent
 
 **Database Changes:**
 ```sql

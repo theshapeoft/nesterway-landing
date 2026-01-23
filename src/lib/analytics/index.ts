@@ -28,6 +28,9 @@ export type AnalyticsEvent =
   | { name: "qr_scan"; data: { property_id: string; slug: string } }
   | { name: "property_viewed"; data: { property_id: string; slug: string } }
   | { name: "wifi_copied"; data: { property_id: string } }
+  // Guest registration events
+  | { name: "guest_registration_viewed"; data: { property_id: string; property_slug: string } }
+  | { name: "guest_registered"; data: { property_id: string; property_slug: string; additional_guests: number } }
   // Auth events
   | { name: "signup_started"; data: { method: "email" | "google" } }
   | { name: "signup_completed"; data: { method: "email" | "google"; user_id?: string } }

@@ -14,6 +14,7 @@ export const sliemaSanctuary: Property = {
   hostPhotoUrl: undefined, // Will use initials fallback
   checkoutTime: "11:00",
   accessMode: "public",
+  requireGuestRegistration: false,
   wifi: {
     networks: [
       {

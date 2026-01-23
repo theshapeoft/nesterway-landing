@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   PropertyHeader,
   QuickAccessBar,
@@ -10,6 +10,8 @@ import {
   BottomNavigation,
   OfflineIndicator,
   AccessRestricted,
+  GuestRegistrationGate,
+  isGuestRegistered,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property } from "@/types";
@@ -28,6 +30,23 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   const { toast, showToast, hideToast } = useToast();
   const { isOffline, hasCachedData } = useOffline(property);
 
+  // Check if guest registration is needed
+  const [needsRegistration, setNeedsRegistration] = useState<boolean | null>(null);
+
+  // Check registration status on mount (client-side only)
+  useEffect(() => {
+    if (property.requireGuestRegistration) {
+      setNeedsRegistration(!isGuestRegistered(property.id));
+    } else {
+      setNeedsRegistration(false);
+    }
+  }, [property.id, property.requireGuestRegistration]);
+
+  // Handle registration completion
+  const handleRegistrationComplete = useCallback(() => {
+    setNeedsRegistration(false);
+  }, []);
+
   // Track page view on mount (this represents a QR scan or direct visit)
   useEffect(() => {
     track("property_viewed", { property_id: property.id, slug: property.slug });
@@ -38,6 +57,25 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   // In the future, this will check for valid access codes/invites
   if (property.accessMode === "invite_only") {
     return <AccessRestricted property={property} />;
+  }
+
+  // Show loading state while checking registration status
+  if (needsRegistration === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  // Show registration gate if guest needs to register
+  if (needsRegistration) {
+    return (
+      <GuestRegistrationGate
+        property={property}
+        onRegistrationComplete={handleRegistrationComplete}
+      />
+    );
   }
 
   const handleWifiCopySuccess = () => {
