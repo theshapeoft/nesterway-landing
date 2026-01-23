@@ -733,3 +733,44 @@
 
 ### Remaining P1 Features (not yet implemented):
 - 3.1.4 Full Guide PDF Export (requires Puppeteer server-side generation)
+
+---
+
+## 2026-01-23: Added Full Guide PDF Section UI (Feature 3.1.4 - Partial)
+
+### What was done:
+1. Added "Full Guide PDF" section to QrCodeTab.tsx:
+   - Section header and description
+   - Card with BookOpen icon and feature description
+   - "Generate & Download" button with loading state
+   - "Customization Options" expandable panel
+
+2. Implemented customization options UI:
+   - Section toggles: WiFi, Rules, Appliances, Emergency, Custom Sections, Map
+   - Branding toggle for including Travelama logo
+   - Responsive grid layout (2 columns mobile, 3 columns desktop)
+
+3. Added placeholder for PDF generation:
+   - Shows "coming soon" toast when clicked
+   - Loading spinner animation during "generation"
+   - Disabled when property is unpublished
+
+4. Fixed unused variable warning:
+   - Removed unused `shortUrl` variable from QrCodeTab.tsx
+
+### Files modified:
+- src/app/dashboard/properties/[id]/tabs/QrCodeTab.tsx (added PDF section UI)
+- PRD.md (marked UI-related acceptance criteria as complete)
+
+### What's still needed for full 3.1.4:
+- Install Puppeteer dependency
+- Create API route `/api/properties/[id]/export-pdf`
+- Implement server-side PDF generation with Puppeteer
+- Create PDF template with cover page, TOC, sections
+- Add analytics event tracking
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes with 0 errors (only pre-existing warnings)
+- No test script exists in this project
