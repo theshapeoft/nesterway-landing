@@ -128,10 +128,10 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host, I want to download a complete PDF version of my guide with professional design, so I can email it to guests or print physical copies.
 
 **Acceptance Criteria:**
-- [ ] "Quick Share" tab in property editor navigation
-- [ ] Section: "GENERATE PDF VERSION OF GUIDE"
-- [ ] "Generate & Download" button with loading indicator
-- [ ] "Customization Options" button opens modal:
+- [x] "Quick Share" tab in property editor navigation (added to existing QR Code tab)
+- [x] Section: "GENERATE PDF VERSION OF GUIDE"
+- [x] "Generate & Download" button with loading indicator
+- [x] "Customization Options" button opens modal:
   - Checkboxes to include/exclude: WiFi, Rules, Appliances, Emergency Contacts, Custom Sections, Map
   - Header/footer options: Property name, host contact, page numbers
   - Branding toggle: Include Travelama logo

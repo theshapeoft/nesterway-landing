@@ -2,8 +2,9 @@
 
 import { useState, useRef, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Copy, Check, Download, FileText, Printer } from "lucide-react";
+import { Copy, Check, Download, FileText, Printer, BookOpen, Settings2, Loader2 } from "lucide-react";
 import { jsPDF } from "jspdf";
+import { toast } from "sonner";
 import { Button } from "@/components/ui";
 import type { DbProperty } from "@/lib/actions/properties";
 import { track } from "@/lib/analytics";
@@ -31,12 +32,22 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
   const [includeBranding, setIncludeBranding] = useState(true);
   const [copied, setCopied] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<PrintTemplate | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [showPdfOptions, setShowPdfOptions] = useState(false);
+  const [pdfOptions, setPdfOptions] = useState({
+    includeWifi: true,
+    includeRules: true,
+    includeAppliances: true,
+    includeEmergency: true,
+    includeSections: true,
+    includeMap: true,
+    includeBranding: true,
+  });
   const qrRef = useRef<HTMLDivElement>(null);
 
   // Use environment variable or fallback for the base URL
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://travelama.com";
   const propertyUrl = `${baseUrl}/stay/${property.slug}`;
-  const shortUrl = `/stay/${property.slug}`;
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(propertyUrl);
@@ -584,6 +595,118 @@ export function QrCodeTab({ property }: QrCodeTabProps) {
               Download PDF
             </Button>
           </div>
+        </div>
+      </div>
+
+      {/* Full Guide PDF Export */}
+      <div className="border-t pt-6">
+        <h3 className="mb-3 font-medium">Full Guide PDF</h3>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Generate a complete PDF version of your guide to email to guests or print physical copies.
+        </p>
+
+        <div className="rounded-xl border bg-card p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <BookOpen className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-medium">Property Guide PDF</h4>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Includes cover page, WiFi details, house rules, appliances, emergency contacts, and custom sections.
+              </p>
+            </div>
+          </div>
+
+          {/* Customization Options */}
+          {showPdfOptions && (
+            <div className="mt-4 space-y-3 border-t pt-4">
+              <h5 className="text-sm font-medium">Include in PDF:</h5>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {[
+                  { key: "includeWifi", label: "WiFi Details" },
+                  { key: "includeRules", label: "House Rules" },
+                  { key: "includeAppliances", label: "Appliances" },
+                  { key: "includeEmergency", label: "Emergency Contacts" },
+                  { key: "includeSections", label: "Custom Sections" },
+                  { key: "includeMap", label: "Map" },
+                ].map(({ key, label }) => (
+                  <label key={key} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={pdfOptions[key as keyof typeof pdfOptions]}
+                      onChange={(e) =>
+                        setPdfOptions((prev) => ({
+                          ...prev,
+                          [key]: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+              <div className="border-t pt-3">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={pdfOptions.includeBranding}
+                    onChange={(e) =>
+                      setPdfOptions((prev) => ({
+                        ...prev,
+                        includeBranding: e.target.checked,
+                      }))
+                    }
+                    className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                  />
+                  Include Travelama branding
+                </label>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              onClick={() => {
+                setIsGeneratingPdf(true);
+                // TODO: Implement actual PDF generation with Puppeteer
+                // For now, show a coming soon message
+                setTimeout(() => {
+                  setIsGeneratingPdf(false);
+                  toast?.("Full Guide PDF generation coming soon!", {
+                    description: "This feature is currently under development.",
+                  });
+                }, 1000);
+              }}
+              disabled={isGeneratingPdf || !isPublished}
+            >
+              {isGeneratingPdf ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Generate & Download
+                </>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPdfOptions(!showPdfOptions)}
+            >
+              <Settings2 className="mr-2 h-4 w-4" />
+              {showPdfOptions ? "Hide Options" : "Customization Options"}
+            </Button>
+          </div>
+
+          {!isPublished && (
+            <p className="mt-3 text-xs text-amber-600">
+              Publish your property to generate a PDF guide.
+            </p>
+          )}
         </div>
       </div>
 
