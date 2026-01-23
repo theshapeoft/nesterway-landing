@@ -32,6 +32,7 @@ import { EmergencyTab } from "./tabs/EmergencyTab";
 import { QrCodeTab } from "./tabs/QrCodeTab";
 import { AppliancesTab } from "./tabs/AppliancesTab";
 import { CustomSectionsTab } from "./tabs/CustomSectionsTab";
+import { DataTab } from "./tabs/DataTab";
 import { PreviewPanel } from "./PreviewPanel";
 
 const tabs = [
@@ -42,6 +43,7 @@ const tabs = [
   { id: "sections", label: "Sections" },
   { id: "emergency", label: "Emergency" },
   { id: "qr", label: "QR Code" },
+  { id: "data", label: "Data" },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
@@ -347,6 +349,14 @@ export function PropertyEditor({
               />
             )}
             {activeTab === "qr" && <QrCodeTab property={property} />}
+            {activeTab === "data" && (
+              <DataTab
+                propertyId={property.id}
+                propertySlug={property.slug}
+                requireGuestRegistration={property.require_guest_registration || false}
+                onDataChange={triggerPreviewRefresh}
+              />
+            )}
           </div>
         </main>
 

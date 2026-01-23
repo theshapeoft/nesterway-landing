@@ -31,6 +31,8 @@ export type AnalyticsEvent =
   // Guest registration events
   | { name: "guest_registration_viewed"; data: { property_id: string; property_slug: string } }
   | { name: "guest_registered"; data: { property_id: string; property_slug: string; additional_guests: number } }
+  // Data export events
+  | { name: "data_exported_csv"; data: { property_id: string; count: number } }
   // Auth events
   | { name: "signup_started"; data: { method: "email" | "google" } }
   | { name: "signup_completed"; data: { method: "email" | "google"; user_id?: string } }

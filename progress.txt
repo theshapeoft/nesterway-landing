@@ -394,3 +394,53 @@
 - No test script exists in this project
 - Used "status check on page load" approach as noted in PRD as acceptable for MVP
 - Feature 3.6.4 core functionality is complete (expiry email notification marked as future enhancement)
+
+---
+
+## 2026-01-23: Implemented Guest Registration Data Export (Feature 3.6.5)
+
+### What was done:
+1. Created DataTab component (`src/app/dashboard/properties/[id]/tabs/DataTab.tsx`):
+   - Displays guest registrations in a sortable table
+   - Columns: Name, Email, Additional Guests, Registration Date
+   - Sortable by clicking column headers (Name, Email, Registration Date)
+   - Search filter for name/email with real-time filtering
+   - Delete button for GDPR compliance (with confirmation dialog)
+   - Loading state while fetching data
+   - Empty state when no registrations exist
+   - Warning banner when guest registration is disabled
+
+2. Implemented CSV export functionality:
+   - "Export CSV" button above table
+   - CSV includes: Full Name, Email, Additional Guests, Registration Date, IP Address
+   - Filename format: `[property-slug]-registrations-[YYYY-MM-DD].csv`
+   - Proper CSV escaping for quotes in data
+
+3. Added Data tab to property editor:
+   - Added "Data" tab to PropertyEditor.tsx tabs array
+   - Tab appears after "QR Code" tab in navigation
+   - Passes propertyId, propertySlug, requireGuestRegistration to DataTab
+
+4. Added analytics tracking:
+   - Added `data_exported_csv` event type to analytics module
+   - Tracks property_id and count of exported registrations
+
+5. Privacy compliance:
+   - Privacy note displayed: "Guest data stored securely. Export and use data in compliance with privacy laws."
+   - Delete functionality for GDPR compliance
+   - Warning when registration is disabled guides hosts to enable it in Basic Info
+
+### Files created:
+- src/app/dashboard/properties/[id]/tabs/DataTab.tsx
+
+### Files modified:
+- src/app/dashboard/properties/[id]/PropertyEditor.tsx (added Data tab import and rendering)
+- src/lib/analytics/index.ts (added data_exported_csv event type)
+- PRD.md (marked 3.6.5 acceptance criteria as complete)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes for new/modified files (pre-existing errors in landing page components unrelated)
+- No test script exists in this project
+- Feature 3.6.5 is now fully complete

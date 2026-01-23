@@ -545,15 +545,15 @@ $$ LANGUAGE plpgsql;
 **User Story:** As a host, I want to export guest registration data as CSV, so I can add contacts to my email marketing system.
 
 **Acceptance Criteria:**
-- [ ] "Data" tab in property editor shows registrations table:
+- [x] "Data" tab in property editor shows registrations table:
   - Columns: Name, Email, Additional Guests, Registration Date
   - Sortable by date
   - Search filter by name/email
-- [ ] "Export CSV" button above table
-- [ ] CSV includes: Full Name, Email, Additional Guests, Registration Date, IP Address
-- [ ] Filename: `[property-slug]-registrations-[YYYY-MM-DD].csv`
-- [ ] Empty state: "No guest registrations yet. Enable forced registration in property settings."
-- [ ] Privacy note: "Guest data stored securely. Export and use data in compliance with privacy laws."
+- [x] "Export CSV" button above table
+- [x] CSV includes: Full Name, Email, Additional Guests, Registration Date, IP Address
+- [x] Filename: `[property-slug]-registrations-[YYYY-MM-DD].csv`
+- [x] Empty state: "No guest registrations yet. Enable forced registration in property settings."
+- [x] Privacy note: "Guest data stored securely. Export and use data in compliance with privacy laws."
 
 **CSV Format:**
 ```csv
