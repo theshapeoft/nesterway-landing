@@ -727,8 +727,8 @@ CREATE INDEX idx_map_pins_category ON map_pins(category_id);
 **User Story:** As a guest, I want to view an interactive map with categorized recommendations, so I can explore nearby places organized by type.
 
 **Acceptance Criteria:**
-- [ ] Guest guide navigation shows "Map" tab (only if property.active_map_id set)
-- [ ] Map tab displays:
+- [x] Guest guide navigation shows "Map" tab (only if property.active_map_id set)
+- [x] Map tab displays:
   - Full-height interactive Google Map
   - Property location pin (if show_property_address = true)
   - All pins color-coded by category
@@ -737,18 +737,18 @@ CREATE INDEX idx_map_pins_category ON map_pins(category_id);
     - Category name + color dot
     - Pin count per category
     - Toggle category visibility
-- [ ] Pin interaction:
+- [x] Pin interaction:
   - Click pin: Info window with title, description, address
   - "Get Directions" button (opens Google Maps in new tab)
-- [ ] Filter functionality:
+- [x] Filter functionality:
   - Unchecked categories: Pins hidden
   - Filter state persists in localStorage during session
   - "Show All" / "Hide All" quick buttons
-- [ ] Mobile optimizations:
+- [x] Mobile optimizations:
   - Touch-friendly map controls
   - Collapsible filter panel (bottom sheet)
   - Swipe to expand/collapse
-- [ ] Tab hidden if no active map assigned
+- [x] Tab hidden if no active map assigned
 
 **Guest Map UI:**
 ```
@@ -774,20 +774,20 @@ CREATE INDEX idx_map_pins_category ON map_pins(category_id);
 **User Story:** As a guest, I want to filter map pins by category, so I can focus on specific types of recommendations.
 
 **Acceptance Criteria:**
-- [ ] Category legend displays:
+- [x] Category legend displays:
   - Category name
   - Color indicator (matching pin color)
   - Pin count: "Restaurants (12)"
   - Checkbox to toggle visibility
-- [ ] Interaction:
+- [x] Interaction:
   - Uncheck category: Hide all pins in that category
   - Check category: Show all pins in that category
   - Filter state persists during session (localStorage)
-- [ ] Quick actions:
+- [x] Quick actions:
   - "Show All" button: Check all categories
   - "Hide All" button: Uncheck all categories
-- [ ] Mobile: Bottom sheet with categories, swipe to open/close
-- [ ] Accessible: Keyboard navigation, ARIA labels
+- [x] Mobile: Bottom sheet with categories, swipe to open/close
+- [x] Accessible: Keyboard navigation, ARIA labels
 
 ---
 

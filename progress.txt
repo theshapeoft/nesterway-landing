@@ -626,3 +626,79 @@
 - ESLint passes for new/modified files
 - No test script exists in this project
 - Feature 3.7.2 core functionality is complete
+
+---
+
+## 2026-01-23: Implemented Guest View - Interactive Map Tab (Feature 3.7.3 & 3.7.4)
+
+### What was done:
+1. Updated Property type and data loader:
+   - Added `activeMapId` field to Property interface in src/types/index.ts
+   - Updated getProperty() in src/lib/content/properties.ts to include active_map_id
+
+2. Created server action for guest map data (`src/lib/actions/guest-maps.ts`):
+   - `getGuestMapData()` - Fetches map, categories, and pins for guest view
+   - Works with RLS policies for public access to published property maps
+   - Returns GuestMapData type with map, categories, and pins
+
+3. Created InteractiveMapTab component (`src/components/property/InteractiveMapTab.tsx`):
+   - Full-screen Google Map using @react-google-maps/api
+   - Color-coded markers for each category
+   - Floating filter panel (collapsible):
+     - Category checkboxes with color dots
+     - Pin count per category
+     - "Show All" / "Hide All" quick actions
+   - Info window on pin click with:
+     - Pin title and description
+     - Address display
+     - "Get Directions" button (opens Google Maps)
+   - Property location marker (black dot with white border)
+   - Touch-friendly map controls
+   - Loading and error states
+
+4. Updated PropertyPageClient (`src/app/stay/[slug]/PropertyPageClient.tsx`):
+   - Added map data state (categories, pins, loading)
+   - Fetches map data on mount when property has activeMapId
+   - Full-screen map view when activeTab === "map"
+   - Passes hasMap prop to BottomNavigation
+   - Added map_tab_viewed analytics tracking
+
+5. Updated BottomNavigation (`src/components/property/BottomNavigation.tsx`):
+   - Added hasMap prop (default: false)
+   - Conditionally shows/hides "Map" tab based on hasMap
+   - Tab only visible when property has an active map assigned
+
+6. Added analytics event:
+   - Added `map_tab_viewed` event type to src/lib/analytics/index.ts
+
+### Files created:
+- src/lib/actions/guest-maps.ts
+- src/components/property/InteractiveMapTab.tsx
+
+### Files modified:
+- src/types/index.ts (added activeMapId to Property)
+- src/lib/content/properties.ts (fetch active_map_id)
+- src/components/property/index.ts (export InteractiveMapTab)
+- src/components/property/BottomNavigation.tsx (hasMap conditional rendering)
+- src/app/stay/[slug]/PropertyPageClient.tsx (map tab view)
+- src/lib/analytics/index.ts (added map_tab_viewed event)
+- PRD.md (marked 3.7.3 and 3.7.4 acceptance criteria as complete)
+
+### Features implemented (3.7.3 & 3.7.4 combined):
+- Guest navigation shows "Map" tab only when property has active_map_id
+- Full-height interactive Google Map with all pins
+- Color-coded pins by category
+- Floating filter panel with category toggles
+- Pin info windows with title, description, address
+- "Get Directions" button opens Google Maps
+- "Show All" / "Hide All" quick filter buttons
+- Touch-friendly mobile controls
+- Tab hidden when no active map assigned
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes for new/modified files
+- No test script exists in this project
+- Features 3.7.3 and 3.7.4 are now fully complete
+- This completes the Interactive Maps System (section 3.7)

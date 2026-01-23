@@ -13,12 +13,14 @@ import {
   GuestRegistrationGate,
   isGuestRegistered,
   getStoredAccessCode,
+  InteractiveMapTab,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
-import type { Property } from "@/types";
+import type { Property, MapCategory, MapPin } from "@/types";
 import type { NavTab } from "@/components/property/BottomNavigation";
 import { track } from "@/lib/analytics";
 import { useOffline } from "@/hooks";
+import { getGuestMapData } from "@/lib/actions/guest-maps";
 
 interface PropertyPageClientProps {
   property: Property;
@@ -35,6 +37,10 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   const [needsRegistration, setNeedsRegistration] = useState<boolean | null>(null);
   // Check if invite-only property needs access validation
   const [needsAccessCode, setNeedsAccessCode] = useState<boolean | null>(null);
+  // Map data for interactive map tab
+  const [mapCategories, setMapCategories] = useState<MapCategory[]>([]);
+  const [mapPins, setMapPins] = useState<MapPin[]>([]);
+  const [mapLoading, setMapLoading] = useState(false);
 
   // Check access code status on mount (client-side only for invite-only properties)
   useEffect(() => {
@@ -73,6 +79,26 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
       setNeedsRegistration(false);
     }
   }, [property.id, property.requireGuestRegistration]);
+
+  // Fetch map data if property has an active map
+  useEffect(() => {
+    if (property.activeMapId) {
+      setMapLoading(true);
+      getGuestMapData(property.activeMapId)
+        .then((data) => {
+          if (data) {
+            setMapCategories(data.categories);
+            setMapPins(data.pins);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching map data:", err);
+        })
+        .finally(() => {
+          setMapLoading(false);
+        });
+    }
+  }, [property.activeMapId]);
 
   // Handle registration completion
   const handleRegistrationComplete = useCallback(() => {
@@ -125,14 +151,60 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
-    // For now, scroll to sections based on tab
-    // In future, could implement actual navigation views
+    // Handle tab-specific behavior
     if (tab === "info") {
       document.getElementById("property-sections")?.scrollIntoView({ behavior: "smooth" });
     } else if (tab === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab === "map" && property.activeMapId) {
+      track("map_tab_viewed", { property_id: property.id });
     }
   };
+
+  // Check if map tab should be shown
+  const hasActiveMap = Boolean(property.activeMapId) && mapCategories.length > 0;
+
+  // Show full-screen map view when map tab is active
+  if (activeTab === "map" && hasActiveMap) {
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Offline Indicator */}
+        <OfflineIndicator
+          isOffline={isOffline}
+          hasCachedData={hasCachedData(property.slug)}
+        />
+
+        {/* Full-screen map container */}
+        <div className="fixed inset-0 bottom-[60px] z-0">
+          {mapLoading ? (
+            <div className="flex h-full items-center justify-center bg-neutral-900">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            </div>
+          ) : (
+            <InteractiveMapTab
+              categories={mapCategories}
+              pins={mapPins}
+            />
+          )}
+        </div>
+
+        {/* Bottom Navigation */}
+        <BottomNavigation
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          hasMap={hasActiveMap}
+        />
+
+        {/* Toast notifications */}
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={hideToast}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -167,7 +239,11 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
       </div>
 
       {/* Bottom Navigation */}
-      <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
+      <BottomNavigation
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        hasMap={hasActiveMap}
+      />
 
       {/* Modals */}
       <WiFiModal

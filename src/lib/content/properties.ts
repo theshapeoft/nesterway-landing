@@ -65,6 +65,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     checkoutTime: formatTime(dbProperty.checkout_time),
     accessMode: (dbProperty.access_mode || "public") as PropertyAccessMode,
     requireGuestRegistration: dbProperty.require_guest_registration || false,
+    activeMapId: dbProperty.active_map_id || undefined,
     wifi: {
       networks: (wifiNetworks || []).map((n): WiFiNetwork => ({
         name: n.name,

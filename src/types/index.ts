@@ -59,6 +59,7 @@ export interface Property {
   checkoutTime: string;
   accessMode: PropertyAccessMode;
   requireGuestRegistration: boolean;
+  activeMapId?: string;
   wifi: {
     networks: WiFiNetwork[];
   };

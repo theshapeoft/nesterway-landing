@@ -9,6 +9,7 @@ interface BottomNavigationProps {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
   className?: string;
+  hasMap?: boolean;
 }
 
 const navItems: { id: NavTab; label: string; icon: typeof House }[] = [
@@ -22,7 +23,16 @@ export function BottomNavigation({
   activeTab,
   onTabChange,
   className,
+  hasMap = false,
 }: BottomNavigationProps) {
+  // Filter out map tab if property doesn't have an active map
+  const visibleItems = navItems.filter((item) => {
+    if (item.id === "map" && !hasMap) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <nav
       className={cn(
@@ -35,7 +45,7 @@ export function BottomNavigation({
     >
       <div className="mx-auto max-w-lg">
         <div className="flex items-center justify-around px-2 py-2">
-          {navItems.map((item) => {
+          {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
 
