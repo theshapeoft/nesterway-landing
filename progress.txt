@@ -565,3 +565,64 @@
 - ESLint passes for new/modified files
 - No test script exists in this project
 - Feature 3.7.1 is now complete (Map Creation & Category Management)
+
+---
+
+## 2026-01-23: Implemented Pin Management with Location Search (Feature 3.7.2)
+
+### What was done:
+1. Created PlaceSearchInput component (`src/components/dashboard/PlaceSearchInput.tsx`):
+   - Google Places Autocomplete integration using @react-google-maps/api
+   - Search for establishments (restaurants, attractions, landmarks)
+   - Returns place name, address, lat/lng, and place_id
+   - Loading and error states
+   - Reusable component for pin location selection
+
+2. Updated MapsTab with full pin management UI:
+   - "Manage Pins" button on each map card
+   - Pin Management Dialog with:
+     - "Add Map Pin" button
+     - Category filter dropdown
+     - Pin counter display (X/100 pins)
+   - Pin list grouped by category:
+     - Category headers with color dots
+     - Pin title and address (truncated)
+     - Edit and Delete buttons per pin
+   - Add/Edit Pin Dialog with:
+     - Pin title field (required)
+     - PlaceSearchInput for location search with Google Places Autocomplete
+     - Category dropdown (required)
+     - Description textarea (optional, 500 chars max)
+   - Empty state when no pins exist
+   - Warning when no categories exist
+
+3. Exported PlaceSearchInput from dashboard components index
+
+### Files created:
+- src/components/dashboard/PlaceSearchInput.tsx
+
+### Files modified:
+- src/components/dashboard/index.ts (added PlaceSearchInput export)
+- src/app/dashboard/properties/[id]/tabs/MapsTab.tsx (added pin management UI)
+- PRD.md (marked 3.7.2 acceptance criteria as complete)
+
+### What's implemented:
+- Add pin modal with Google Places Autocomplete search
+- Pin list grouped by category with color indicators
+- Edit pin functionality (same modal, pre-filled values)
+- Delete pin with confirmation dialog
+- Empty state for no pins
+- Pin counter updates
+- Filter by category dropdown
+
+### What's deferred to 3.7.3 (Guest View):
+- Google Maps embed preview in host interface
+- Map preview updates with selected location
+- Manual pin drop on map (alternative to search)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes for new/modified files
+- No test script exists in this project
+- Feature 3.7.2 core functionality is complete

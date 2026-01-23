@@ -691,29 +691,29 @@ CREATE INDEX idx_map_pins_category ON map_pins(category_id);
 **User Story:** As a host, I want to add pins to my map by searching for locations, so I can easily add restaurants, attractions, and landmarks.
 
 **Acceptance Criteria:**
-- [ ] Map editing interface displays:
-  - Google Maps embed (centered on property address or default)
+- [x] Map editing interface displays:
+  - Google Maps embed (centered on property address or default) — Deferred to 3.7.3
   - [Add Map Pin] button
   - [Filter Map] button (filter by category)
   - Current pins list grouped by category
-- [ ] Add pin modal:
+- [x] Add pin modal:
   - Pin title (required)
   - Pin location: Search field with Google Places Autocomplete
     - Dropdown suggestions as user types
     - Selects: Name, address, lat/lng, place_id
-  - Map preview updates with selected location
-  - Alternative: Manual pin drop on map
-  - Pin description (optional, rich text, 500 chars)
+  - Map preview updates with selected location — Deferred to 3.7.3
+  - Alternative: Manual pin drop on map — Deferred to 3.7.3
+  - Pin description (optional, 500 chars)
   - Categorize this pin: Dropdown of map's categories (required)
   - [Add Map Pin] button
-- [ ] Pin list shows:
+- [x] Pin list shows:
   - Category headers with color indicator dot
   - Pin title, address (truncated)
   - Edit / Delete icons
-- [ ] Edit pin: Same modal, pre-filled values
-- [ ] Delete pin: Confirmation dialog
-- [ ] Empty state: "No map pins exist. Try adding a new map pin."
-- [ ] Pin counter updates: "45/100 pins"
+- [x] Edit pin: Same modal, pre-filled values
+- [x] Delete pin: Confirmation dialog
+- [x] Empty state: "No map pins exist. Try adding a new map pin."
+- [x] Pin counter updates: "45/100 pins"
 
 **Technical Notes:**
 - Google Places Autocomplete: `NEXT_PUBLIC_GOOGLE_PLACES_API_KEY`

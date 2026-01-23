@@ -8,6 +8,9 @@ import {
   X,
   AlertTriangle,
   Map as MapIcon,
+  MapPin,
+  Pencil,
+  Filter,
 } from "lucide-react";
 import {
   Button,
@@ -18,6 +21,7 @@ import {
   DialogFooter,
 } from "@/components/ui";
 import { FormField } from "@/components/auth/FormField";
+import { PlaceSearchInput, PlaceData } from "@/components/dashboard";
 import {
   getMaps,
   createMap,
@@ -26,8 +30,12 @@ import {
   deleteCategory,
   assignMapToProperty,
   getPropertyActiveMap,
+  getPins,
+  createPin,
+  updatePin,
+  deletePin,
 } from "@/lib/actions/maps";
-import type { PropertyMap, MapCategoryColor } from "@/types";
+import type { PropertyMap, MapCategoryColor, MapPin as MapPinType, MapCategory } from "@/types";
 
 interface MapsTabProps {
   propertyId: string;
@@ -51,6 +59,13 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
+  // Pin management state
+  const [selectedMapForPins, setSelectedMapForPins] = useState<PropertyMap | null>(null);
+  const [pins, setPins] = useState<MapPinType[]>([]);
+  const [isAddingPin, setIsAddingPin] = useState(false);
+  const [editingPin, setEditingPin] = useState<MapPinType | null>(null);
+  const [filterCategoryId, setFilterCategoryId] = useState<string | null>(null);
+
   // Form state for new map
   const [newMapTitle, setNewMapTitle] = useState("");
   const [showPropertyAddress, setShowPropertyAddress] = useState(true);
@@ -62,6 +77,12 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
   const [newCategoryColor, setNewCategoryColor] = useState<MapCategoryColor>("blue");
 
+  // Form state for pins
+  const [pinTitle, setPinTitle] = useState("");
+  const [pinDescription, setPinDescription] = useState("");
+  const [pinCategoryId, setPinCategoryId] = useState("");
+  const [pinPlace, setPinPlace] = useState<PlaceData | null>(null);
+
   const fetchData = useCallback(async () => {
     const [mapsData, activeMap] = await Promise.all([
       getMaps(),
@@ -71,9 +92,20 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
     setActiveMapId(activeMap);
   }, [propertyId]);
 
+  const fetchPins = useCallback(async (mapId: string) => {
+    const pinsData = await getPins(mapId);
+    setPins(pinsData);
+  }, []);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (selectedMapForPins) {
+      fetchPins(selectedMapForPins.id);
+    }
+  }, [selectedMapForPins, fetchPins]);
 
   const handleCreateMap = async () => {
     if (!newMapTitle.trim()) {
@@ -116,6 +148,10 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
     startTransition(async () => {
       const result = await deleteMap(mapId);
       if (result.success) {
+        if (selectedMapForPins?.id === mapId) {
+          setSelectedMapForPins(null);
+          setPins([]);
+        }
         await fetchData();
         onDataChange?.();
       } else {
@@ -158,6 +194,9 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
       const result = await deleteCategory(categoryId);
       if (result.success) {
         await fetchData();
+        if (selectedMapForPins) {
+          await fetchPins(selectedMapForPins.id);
+        }
         onDataChange?.();
       } else {
         setError(result.error || "Failed to delete category");
@@ -173,6 +212,134 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
         onDataChange?.();
       } else {
         setError(result.error || "Failed to assign map");
+      }
+    });
+  };
+
+  const handleOpenPinManagement = (map: PropertyMap) => {
+    setSelectedMapForPins(map);
+    setFilterCategoryId(null);
+  };
+
+  const handleClosePinManagement = () => {
+    setSelectedMapForPins(null);
+    setPins([]);
+    setFilterCategoryId(null);
+  };
+
+  const resetPinForm = () => {
+    setPinTitle("");
+    setPinDescription("");
+    setPinCategoryId("");
+    setPinPlace(null);
+    setEditingPin(null);
+  };
+
+  const handleOpenAddPin = () => {
+    resetPinForm();
+    // Set default category if available
+    if (selectedMapForPins?.categories && selectedMapForPins.categories.length > 0) {
+      setPinCategoryId(selectedMapForPins.categories[0].id);
+    }
+    setIsAddingPin(true);
+  };
+
+  const handleOpenEditPin = (pin: MapPinType) => {
+    setPinTitle(pin.title);
+    setPinDescription(pin.description || "");
+    setPinCategoryId(pin.categoryId);
+    setPinPlace({
+      name: pin.title,
+      address: pin.address || "",
+      latitude: pin.latitude,
+      longitude: pin.longitude,
+      placeId: pin.placeId || "",
+    });
+    setEditingPin(pin);
+    setIsAddingPin(true);
+  };
+
+  const handleSavePin = async () => {
+    if (!pinTitle.trim()) {
+      setError("Pin title is required");
+      return;
+    }
+    if (!pinCategoryId) {
+      setError("Please select a category");
+      return;
+    }
+    if (!pinPlace) {
+      setError("Please search and select a location");
+      return;
+    }
+
+    setError(null);
+    startTransition(async () => {
+      if (editingPin) {
+        // Update existing pin
+        const result = await updatePin(editingPin.id, {
+          title: pinTitle.trim(),
+          description: pinDescription.trim() || undefined,
+          categoryId: pinCategoryId,
+          latitude: pinPlace.latitude,
+          longitude: pinPlace.longitude,
+          placeId: pinPlace.placeId,
+          address: pinPlace.address,
+        });
+
+        if (result.success) {
+          setIsAddingPin(false);
+          resetPinForm();
+          await fetchData();
+          if (selectedMapForPins) {
+            await fetchPins(selectedMapForPins.id);
+          }
+          onDataChange?.();
+        } else {
+          setError(result.error || "Failed to update pin");
+        }
+      } else {
+        // Create new pin
+        const result = await createPin({
+          categoryId: pinCategoryId,
+          title: pinTitle.trim(),
+          description: pinDescription.trim() || undefined,
+          latitude: pinPlace.latitude,
+          longitude: pinPlace.longitude,
+          placeId: pinPlace.placeId,
+          address: pinPlace.address,
+        });
+
+        if (result.success) {
+          setIsAddingPin(false);
+          resetPinForm();
+          await fetchData();
+          if (selectedMapForPins) {
+            await fetchPins(selectedMapForPins.id);
+          }
+          onDataChange?.();
+        } else {
+          setError(result.error || "Failed to create pin");
+        }
+      }
+    });
+  };
+
+  const handleDeletePin = async (pinId: string) => {
+    if (!confirm("Are you sure you want to delete this pin?")) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await deletePin(pinId);
+      if (result.success) {
+        await fetchData();
+        if (selectedMapForPins) {
+          await fetchPins(selectedMapForPins.id);
+        }
+        onDataChange?.();
+      } else {
+        setError(result.error || "Failed to delete pin");
       }
     });
   };
@@ -204,6 +371,25 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
   const getColorClass = (color: MapCategoryColor) => {
     return CATEGORY_COLORS.find((c) => c.value === color)?.className || "bg-blue-500";
   };
+
+  const getCategoryById = (categoryId: string): MapCategory | undefined => {
+    return selectedMapForPins?.categories?.find((c) => c.id === categoryId);
+  };
+
+  // Filter pins by category
+  const filteredPins = filterCategoryId
+    ? pins.filter((pin) => pin.categoryId === filterCategoryId)
+    : pins;
+
+  // Group pins by category
+  const pinsByCategory = filteredPins.reduce((acc, pin) => {
+    const categoryId = pin.categoryId;
+    if (!acc[categoryId]) {
+      acc[categoryId] = [];
+    }
+    acc[categoryId].push(pin);
+    return acc;
+  }, {} as Record<string, MapPinType[]>);
 
   return (
     <div className="space-y-6">
@@ -305,14 +491,24 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
                       )}
                     </p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => handleDeleteMap(map.id)}
-                    disabled={isPending}
-                  >
-                    <Trash2 className="h-4 w-4 text-muted-foreground" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleOpenPinManagement(map)}
+                    >
+                      <MapPin className="mr-1 h-4 w-4" />
+                      Manage Pins
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => handleDeleteMap(map.id)}
+                      disabled={isPending}
+                    >
+                      <Trash2 className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Categories */}
@@ -514,6 +710,249 @@ export function MapsTab({ propertyId, onDataChange }: MapsTabProps) {
               disabled={isPending}
             >
               Create Map
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Pin Management Dialog */}
+      <Dialog open={!!selectedMapForPins} onOpenChange={(open) => !open && handleClosePinManagement()}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Manage Pins - {selectedMapForPins?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* Pin Actions */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleOpenAddPin}
+                  disabled={!selectedMapForPins?.categories?.length}
+                >
+                  <Plus className="mr-1 h-4 w-4" />
+                  Add Map Pin
+                </Button>
+                {selectedMapForPins?.categories && selectedMapForPins.categories.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <select
+                      value={filterCategoryId || ""}
+                      onChange={(e) => setFilterCategoryId(e.target.value || null)}
+                      className="rounded-md border border-border bg-background px-3 py-1.5 text-sm"
+                    >
+                      <option value="">All Categories</option>
+                      {selectedMapForPins.categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {pins.length}/100 pins
+              </span>
+            </div>
+
+            {!selectedMapForPins?.categories?.length && (
+              <div className="rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-3 text-sm text-yellow-700 dark:text-yellow-300">
+                Add at least one category to this map before creating pins.
+              </div>
+            )}
+
+            {/* Pin List */}
+            {pins.length === 0 ? (
+              <div className="rounded-xl border-2 border-dashed border-border bg-muted/50 p-8 text-center">
+                <MapPin className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
+                <p className="text-muted-foreground">No map pins exist</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Try adding a new map pin
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {selectedMapForPins?.categories?.map((category) => {
+                  const categoryPins = pinsByCategory[category.id] || [];
+                  if (categoryPins.length === 0 && filterCategoryId) return null;
+
+                  return (
+                    <div key={category.id}>
+                      <div className="mb-2 flex items-center gap-2">
+                        <span
+                          className={`h-3 w-3 rounded-full ${getColorClass(category.color)}`}
+                        />
+                        <h4 className="text-sm font-medium">{category.title}</h4>
+                        <span className="text-xs text-muted-foreground">
+                          ({categoryPins.length})
+                        </span>
+                      </div>
+                      {categoryPins.length === 0 ? (
+                        <p className="ml-5 text-sm text-muted-foreground">
+                          No pins in this category
+                        </p>
+                      ) : (
+                        <div className="ml-5 space-y-2">
+                          {categoryPins.map((pin) => (
+                            <div
+                              key={pin.id}
+                              className="flex items-start justify-between rounded-lg border bg-background p-3"
+                            >
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium">{pin.title}</p>
+                                {pin.address && (
+                                  <p className="truncate text-sm text-muted-foreground">
+                                    {pin.address}
+                                  </p>
+                                )}
+                                {pin.description && (
+                                  <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                                    {pin.description}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="ml-2 flex items-center gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon-sm"
+                                  onClick={() => handleOpenEditPin(pin)}
+                                  disabled={isPending}
+                                >
+                                  <Pencil className="h-4 w-4 text-muted-foreground" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon-sm"
+                                  onClick={() => handleDeletePin(pin.id)}
+                                  disabled={isPending}
+                                >
+                                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="secondary" onClick={handleClosePinManagement}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add/Edit Pin Dialog */}
+      <Dialog open={isAddingPin} onOpenChange={(open) => {
+        if (!open) {
+          setIsAddingPin(false);
+          resetPinForm();
+        }
+      }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {editingPin ? "Edit Map Pin" : "Add Map Pin"}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <FormField
+              label="Pin Title"
+              name="pinTitle"
+              type="text"
+              placeholder="e.g., Best Coffee Shop"
+              value={pinTitle}
+              onChange={(e) => setPinTitle(e.target.value)}
+              required
+            />
+
+            <PlaceSearchInput
+              label="Pin Location"
+              hint="Search for the location"
+              value={pinPlace}
+              onChange={setPinPlace}
+              required
+            />
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">
+                Category <span className="text-destructive">*</span>
+              </label>
+              <select
+                value={pinCategoryId}
+                onChange={(e) => setPinCategoryId(e.target.value)}
+                className="w-full rounded-lg border border-border bg-background px-4 py-2 text-sm"
+                required
+              >
+                <option value="">Select a category</option>
+                {selectedMapForPins?.categories?.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.title}
+                  </option>
+                ))}
+              </select>
+              {pinCategoryId && (
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`h-2.5 w-2.5 rounded-full ${getColorClass(
+                      getCategoryById(pinCategoryId)?.color || "blue"
+                    )}`}
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {getCategoryById(pinCategoryId)?.title}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">
+                Description <span className="text-muted-foreground">(optional)</span>
+              </label>
+              <textarea
+                value={pinDescription}
+                onChange={(e) => setPinDescription(e.target.value)}
+                placeholder="Add notes about this place..."
+                className="w-full rounded-lg border border-border bg-background px-4 py-2 text-sm"
+                rows={3}
+                maxLength={500}
+              />
+              <p className="text-xs text-muted-foreground">
+                {pinDescription.length}/500 characters
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setIsAddingPin(false);
+                resetPinForm();
+              }}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="accent"
+              onClick={handleSavePin}
+              disabled={isPending}
+            >
+              {editingPin ? "Save Changes" : "Add Map Pin"}
             </Button>
           </DialogFooter>
         </DialogContent>
