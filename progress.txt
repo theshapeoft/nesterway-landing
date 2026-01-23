@@ -489,3 +489,79 @@
 - No test script exists in this project
 - Feature 3.6.6 is now fully complete
 - This completes all features in section 3.6 (Guest Access Control & Invites)
+
+---
+
+## 2026-01-23: Implemented Interactive Maps - Map Creation & Category Management (Feature 3.7.1)
+
+### What was done:
+1. Created database migration (`20250123000004_add_interactive_maps.sql`):
+   - Created `maps` table for storing user maps with title and settings
+   - Created `map_categories` table for organizing pins by category
+   - Created `map_pins` table for individual location pins
+   - Added `active_map_id` column to properties table
+   - Added comprehensive indexes for performance
+   - Added RLS policies for user ownership and public access to published properties
+   - Added trigger for auto-updating `updated_at` timestamp
+
+2. Updated TypeScript types (`src/types/index.ts`):
+   - Added `MapCategoryColor` type ("blue" | "red" | "yellow" | "green" | "purple" | "orange")
+   - Added `MapCategory` interface
+   - Added `MapPin` interface
+   - Added `PropertyMap` interface
+
+3. Created server actions (`src/lib/actions/maps.ts`):
+   - `createMap()` - Creates map with initial categories
+   - `getMaps()` - Fetches all maps for user with categories and pin counts
+   - `getMap()` - Fetches single map with details
+   - `updateMap()` - Updates map title and settings
+   - `deleteMap()` - Deletes map (cascades to categories and pins)
+   - `createCategory()` - Adds category to map
+   - `updateCategory()` - Updates category title/color
+   - `deleteCategory()` - Deletes category (cascades to pins)
+   - `getCategories()` - Gets categories for a map
+   - `createPin()` - Creates pin with 100 pin limit enforcement
+   - `updatePin()` - Updates pin details
+   - `deletePin()` - Deletes pin
+   - `getPins()` - Gets all pins for a map
+   - `assignMapToProperty()` - Assigns map to property
+   - `getPropertyActiveMap()` - Gets property's active map ID
+
+4. Created MapsTab component (`src/app/dashboard/properties/[id]/tabs/MapsTab.tsx`):
+   - "Add Map" button with creation dialog
+   - Map creation form with title, show property address toggle, and categories
+   - Dynamic category fields with color selection
+   - Maps list showing all user's maps with pin counts
+   - Active map indicator for current property
+   - Map assignment dropdown
+   - Inline category addition for existing maps
+   - Category deletion with confirmation
+   - Map deletion with confirmation
+   - Warning at 90 pins (approaching limit)
+   - Error display for validation failures
+
+5. Registered Maps tab in PropertyEditor.tsx:
+   - Added "Map" tab between "Emergency" and "QR Code"
+   - Added MapsTab import and rendering
+
+### Files created:
+- supabase/migrations/20250123000004_add_interactive_maps.sql
+- src/lib/actions/maps.ts
+- src/app/dashboard/properties/[id]/tabs/MapsTab.tsx
+
+### Files modified:
+- src/types/index.ts (added map types)
+- src/app/dashboard/properties/[id]/PropertyEditor.tsx (added Maps tab)
+- PRD.md (marked 3.7.1 acceptance criteria as complete)
+
+### What's still needed for full 3.7 (Interactive Maps System):
+- 3.7.2 Pin Management with Location Search (Google Places integration)
+- 3.7.3 Guest View - Interactive Map Tab
+- 3.7.4 Category Filter System
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes for new/modified files
+- No test script exists in this project
+- Feature 3.7.1 is now complete (Map Creation & Category Management)

@@ -616,9 +616,9 @@ Or reply directly to this email.
 **User Story:** As a host, I want to create reusable maps with categorized pins, so I can show guests local recommendations organized by type.
 
 **Acceptance Criteria:**
-- [ ] New "Map" tab in property editor navigation
-- [ ] "Add Map" button opens creation modal
-- [ ] Map creation form:
+- [x] New "Map" tab in property editor navigation
+- [x] "Add Map" button opens creation modal
+- [x] Map creation form:
   - Map title (internal use, required)
   - "Show Guide Address on Map?" toggle (default: Yes)
   - Pin Categories section:
@@ -627,17 +627,17 @@ Or reply directly to this email.
     - [Add Category] button for multiple categories
     - Remove category (X icon)
   - [Create Map] button
-- [ ] Account-level maps list:
+- [x] Account-level maps list:
   - Map title
   - Pin count: "45/100 pins"
   - Actions: Edit, Delete
-- [ ] Map assignment section:
+- [x] Map assignment section:
   - "Set Active Map For This Guide" dropdown
   - Lists all user's maps
   - [Save] button
-- [ ] One map reusable across multiple properties
-- [ ] Warning at 90 pins: "Approaching pin limit (90/100)"
-- [ ] Block at 100 pins: "Pin limit reached. Remove pins or contact support."
+- [x] One map reusable across multiple properties
+- [x] Warning at 90 pins: "Approaching pin limit (90/100)"
+- [x] Block at 100 pins: "Pin limit reached. Remove pins or contact support."
 
 **Database Changes:**
 ```sql

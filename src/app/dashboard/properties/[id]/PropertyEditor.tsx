@@ -33,6 +33,7 @@ import { QrCodeTab } from "./tabs/QrCodeTab";
 import { AppliancesTab } from "./tabs/AppliancesTab";
 import { CustomSectionsTab } from "./tabs/CustomSectionsTab";
 import { DataTab } from "./tabs/DataTab";
+import { MapsTab } from "./tabs/MapsTab";
 import { PreviewPanel } from "./PreviewPanel";
 
 const tabs = [
@@ -42,6 +43,7 @@ const tabs = [
   { id: "rules", label: "Rules" },
   { id: "sections", label: "Sections" },
   { id: "emergency", label: "Emergency" },
+  { id: "maps", label: "Map" },
   { id: "qr", label: "QR Code" },
   { id: "data", label: "Data" },
 ] as const;
@@ -344,6 +346,12 @@ export function PropertyEditor({
             )}
             {activeTab === "emergency" && (
               <EmergencyTab
+                propertyId={property.id}
+                onDataChange={triggerPreviewRefresh}
+              />
+            )}
+            {activeTab === "maps" && (
+              <MapsTab
                 propertyId={property.id}
                 onDataChange={triggerPreviewRefresh}
               />

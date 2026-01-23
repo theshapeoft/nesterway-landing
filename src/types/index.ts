@@ -100,6 +100,41 @@ export interface GuestInvite {
   updatedAt: string;
 }
 
+// Interactive Maps Types
+export type MapCategoryColor = "blue" | "red" | "yellow" | "green" | "purple" | "orange";
+
+export interface MapCategory {
+  id: string;
+  mapId: string;
+  title: string;
+  color: MapCategoryColor;
+  orderIndex: number;
+  createdAt: string;
+}
+
+export interface MapPin {
+  id: string;
+  categoryId: string;
+  title: string;
+  description?: string;
+  latitude: number;
+  longitude: number;
+  placeId?: string;
+  address?: string;
+  createdAt: string;
+}
+
+export interface PropertyMap {
+  id: string;
+  userId: string;
+  title: string;
+  showPropertyAddress: boolean;
+  createdAt: string;
+  updatedAt: string;
+  categories?: MapCategory[];
+  pinCount?: number;
+}
+
 // Area Types
 export interface Recommendation {
   id: string;
