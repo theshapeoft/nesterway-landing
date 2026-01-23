@@ -436,7 +436,7 @@ CREATE INDEX idx_guest_registrations_email ON guest_registrations(email);
 
 **Acceptance Criteria:**
 - [x] New "Invites" tab in main navigation (Dashboard, Guides, **Invites**, Help Center)
-- [ ] "Create Invite" button opens form:
+- [x] "Create Invite" button opens form:
   - Guest name (required)
   - Guest email (required)
   - Property selection (dropdown)
@@ -445,21 +445,21 @@ CREATE INDEX idx_guest_registrations_email ON guest_registrations(email);
   - Lead time before check-in (days, default: 7)
   - Access duration after checkout (days, default: 3)
   - Custom welcome message (optional, 500 chars)
-- [ ] Auto-generated 8-character access code (e.g., "XJ8K2P9M")
-- [ ] Email sent to guest via Resend:
+- [x] Auto-generated 8-character access code (e.g., "XJ8K2P9M")
+- [x] Email sent to guest via Resend:
   - Welcome message
   - Access code
   - Guide link with code pre-filled
   - Access window dates
   - Host contact info
-- [ ] Invite list displays:
+- [x] Invite list displays:
   - Guest name, email
   - Property name
   - Check-in / Check-out dates
   - Access window: "[date] to [date]"
   - Status badge: Pending (gray) / Active (green) / Expired (red) / Revoked (red)
   - Actions dropdown: Resend Email, Edit, Delete
-- [ ] Resend limit: Max 2 resends per 24 hours per invite
+- [x] Resend limit: Max 2 resends per 24 hours per invite
 - [ ] Dashboard widget: "Invites Created" count
 - [x] Empty state: "No invites yet. Create your first invite to get started."
 

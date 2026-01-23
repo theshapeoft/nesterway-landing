@@ -244,3 +244,83 @@
 - ESLint passes for all modified files
 - TypeScript passes (npx tsc --noEmit)
 - Help Center page route does not exist yet (/dashboard/help)
+
+---
+
+## 2026-01-23: Implemented Guest Invite Management UI (Feature 3.6.3 - Core)
+
+### What was done:
+1. Created server actions for invite management (`src/lib/actions/invites.ts`):
+   - `createInvite()` - Creates invite with auto-generated 8-char access code, sends email via Resend
+   - `getInvites()` - Fetches all invites for user's properties with property info
+   - `resendInviteEmail()` - Resends invite email with 2/24hr rate limit
+   - `deleteInvite()` - Deletes an invite
+   - `revokeInvite()` - Revokes an invite (sets status to 'revoked')
+   - Includes `DbGuestInvite` and `InviteWithProperty` types
+   - Transforms database records to app types
+
+2. Created `CreateInviteForm` component:
+   - Dialog/modal-based form with all required fields from PRD
+   - Property selection dropdown
+   - Guest name and email inputs with validation
+   - Check-in/check-out date pickers with validation
+   - Lead time and post-checkout days (configurable, defaults 7/3)
+   - Custom welcome message (optional, 500 chars)
+   - Form validation with field-level error messages
+   - Loading states and error handling
+
+3. Created `InviteList` component:
+   - Displays invites as cards with guest info
+   - Shows status badges (Pending/Active/Expired/Revoked with appropriate colors)
+   - Displays property name, dates, access window, and access code
+   - Actions dropdown menu: Resend Email, Revoke Access, Delete
+   - Expired/revoked invites shown with reduced opacity and strikethrough
+   - Inline error messages for action failures
+
+4. Updated Invites page:
+   - Server component fetches properties and invites
+   - Passes data to client component for interactivity
+   - Empty state when no properties (different message)
+   - Empty state when no invites (with create button)
+
+5. Created `InvitesPageClient` component:
+   - Manages dialog state for create form
+   - Conditionally renders empty state or invite list
+   - Create Invite button disabled when no properties exist
+
+6. Email template implemented:
+   - Branded email via Resend with Travelama template
+   - Includes guest name, property name, stay dates
+   - Access code prominently displayed
+   - Guide link with code pre-filled
+   - Access window dates shown
+   - Custom message included if provided
+   - Host contact info (reply-to set to host email)
+   - Resend email has different subject ("Reminder:")
+
+### Files created:
+- src/lib/actions/invites.ts
+- src/components/dashboard/CreateInviteForm.tsx
+- src/components/dashboard/InviteList.tsx
+- src/app/dashboard/invites/InvitesPageClient.tsx
+
+### Files modified:
+- src/components/dashboard/index.ts (export new components)
+- src/app/dashboard/invites/page.tsx (async data fetching)
+- PRD.md (marked 3.6.3 acceptance criteria as complete)
+
+### What's still needed for full 3.6.3:
+- Dashboard widget: "Invites Created" count
+
+### What's NOT implemented (future features):
+- Edit invite form (Edit action in dropdown) - currently only Resend/Revoke/Delete
+- Invite status automation (3.6.4 - scheduled job for pending→active→expired)
+- Guest registration data export (3.6.5)
+- Contact host form email sending (3.6.6)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- ESLint passes for all new files
+- TypeScript passes (npx tsc --noEmit)
+- Pre-existing lint warnings/errors in landing page components (unrelated)
+- No test script exists in this project
