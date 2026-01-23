@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import type { Property, WiFiNetwork, PropertySection } from "@/types";
+import type { Property, WiFiNetwork, PropertySection, PropertyAccessMode } from "@/types";
 import type { DbProperty } from "@/lib/actions/properties";
 
 // Area name mappings (expand as needed)
@@ -71,6 +71,7 @@ export async function fetchPropertyForPreview(
     hostPhotoUrl: dbProperty.host_photo_url || undefined,
     heroImageUrl: dbProperty.hero_image_url || undefined,
     checkoutTime: formatTime(dbProperty.checkout_time),
+    accessMode: (dbProperty.access_mode || "public") as PropertyAccessMode,
     wifi: {
       networks: (wifiNetworks || []).map(
         (n): WiFiNetwork => ({

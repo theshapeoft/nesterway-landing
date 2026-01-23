@@ -25,6 +25,7 @@ export interface DbProperty {
   hero_image_url: string | null;
   checkout_time: string;
   status: "draft" | "published" | "archived";
+  access_mode: "public" | "invite_only";
   is_deleted: boolean;
   deleted_at: string | null;
   created_at: string;
@@ -254,6 +255,7 @@ export async function updateProperty(id: string, formData: FormData) {
   const hostPhotoUrl = formData.get("host_photo_url") as string | null;
   const heroImageUrl = formData.get("hero_image_url") as string | null;
   const checkoutTime = formData.get("checkout_time") as string | null;
+  const accessMode = formData.get("access_mode") as string | null;
 
   if (name !== null) updates.name = name.trim();
   if (welcomeMessage !== null) updates.welcome_message = welcomeMessage.trim() || null;
@@ -261,6 +263,9 @@ export async function updateProperty(id: string, formData: FormData) {
   if (hostPhotoUrl !== null) updates.host_photo_url = hostPhotoUrl.trim() || null;
   if (heroImageUrl !== null) updates.hero_image_url = heroImageUrl.trim() || null;
   if (checkoutTime !== null) updates.checkout_time = checkoutTime;
+  if (accessMode !== null && (accessMode === "public" || accessMode === "invite_only")) {
+    updates.access_mode = accessMode;
+  }
 
   const { error } = await supabase
     .from("properties")
@@ -385,6 +390,7 @@ export async function duplicateProperty(id: string) {
       host_photo_url: original.host_photo_url,
       hero_image_url: original.hero_image_url,
       checkout_time: original.checkout_time,
+      access_mode: original.access_mode || "public",
       status: "draft", // New property starts as draft
     })
     .select()

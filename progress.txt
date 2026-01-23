@@ -1,200 +1,61 @@
-# Travelama PRD Implementation Progress
+## 2026-01-23: Implemented Public vs Invite-Only Mode (Feature 3.6.1)
 
-## Completed Tasks
+### What was done:
+1. Created database migration (`20250123000000_add_access_mode.sql`) to add `access_mode` column to properties table
+   - Values: 'public' (default) or 'invite_only'
+   - Added index for access_mode filtering
 
-### Phase 1: QR Code Enhancements (Already Implemented)
-- [x] QR Code Download Formats (PNG, SVG, PDF) - Was already implemented
-- [x] QR Code Branding Toggle - Was already implemented
-- [x] Print-Ready Templates (Tent Card, Wall Sign) - Was already implemented
+2. Updated TypeScript types:
+   - Added `PropertyAccessMode` type ("public" | "invite_only") to src/types/index.ts
+   - Added `accessMode` field to `Property` interface
+   - Added `access_mode` field to `DbProperty` interface in src/lib/actions/properties.ts
 
-### Phase 2: Dashboard UX
-- [x] **Drag-and-Drop Reordering** (2026-01-21)
-  - Created reusable SortableList component using @dnd-kit
-  - Implemented in: WifiTab, RulesTab, AppliancesTab, CustomSectionsTab
-  - Features: drag handle, keyboard accessibility (up/down buttons), touch support
-  - Installed @dnd-kit/modifiers package
-  - Commit: 8c35986
+3. Updated property data loaders:
+   - src/lib/content/properties.ts - includes accessMode in property fetch
+   - src/lib/utils/property-preview.ts - includes accessMode in preview data
 
-- [x] **Host Photo Upload** (2026-01-21)
-  - Enhanced ImageUpload component with circular preview mode
-  - Added client-side image resizing using canvas (crops to square, resizes to 200x200)
-  - New props: circular, resizeToSize, previewSize (sm/md/lg)
-  - Updated BasicInfoTab to use circular=true, resizeToSize=200
-  - 80px circular preview in editor, optimized 200x200px uploads
-  - Commit: d426b1d
+4. Created Access Control UI in property editor:
+   - Added "Access Control" section to BasicInfoTab.tsx
+   - Radio button toggle between Public and Invite-Only modes
+   - Visual styling with icons (Globe for public, Lock for invite-only)
+   - Auto-saves on change
 
-- [x] **Property Duplication** (2026-01-21)
-  - Created `duplicateProperty` server action in src/lib/actions/properties.ts
-  - Copies all property data: basic info, WiFi networks, emergency contacts, property sections
-  - Creates new property with name "[Original Name] (Copy)" and unique slug
-  - New property starts as Draft status
-  - Added "Duplicate" menu option to PropertyEditor header (⋮ menu)
-  - Created new client component: src/components/dashboard/PropertyCard.tsx
-  - PropertyCard now has ⋮ menu with Duplicate and Delete options
-  - User redirected to new property editor after duplication
-  - Confirmation toast shown on new property page (2026-01-21)
-    - Modified `duplicateProperty` action to redirect with `?duplicated=true` query param
-    - Added `showDuplicatedToast` prop to PropertyEditor component
-    - Uses sonner toast library (already configured in app layout)
-    - URL cleaned up after toast is shown using `history.replaceState`
+5. Added access mode indicator in property editor footer:
+   - PropertyEditor.tsx now shows current access mode next to publish status
+   - Icon and label: Globe (Public) or Lock (Invite-Only)
 
-### Phase 3: Desktop Enhancement
-- [x] **Live Preview Side-by-Side** (2026-01-21)
-  - Created PreviewPanel component (src/app/dashboard/properties/[id]/PreviewPanel.tsx)
-  - Renders guest view components (PropertyHeader, QuickAccessBar, PropertySections) in mobile device mockup
-  - Desktop only (≥1024px): Split-screen with editor (50%) left, preview (50%) right
-  - Smooth transition animations with duration-300
-  - Toggle button in header to show/hide preview panel
-  - Mobile/tablet: Preview button opens guest page in new tab
-  - Created fetchPropertyForPreview utility (src/lib/utils/property-preview.ts)
-  - Fetches and transforms property data with related tables (wifi, emergency, sections)
-  - Preview updates debounced at 500ms as user edits
-  - All tabs wired up with onDataChange callback to trigger preview refresh
-  - Refresh button with loading spinner in preview header
-  - Close button to hide preview panel
+6. Created AccessRestricted component:
+   - src/components/property/AccessRestricted.tsx
+   - Shows when property is invite-only
+   - Access code input form (placeholder - validation not yet implemented)
+   - Contact host form (placeholder - email sending not yet implemented)
+   - Clean UI with lock icon, divider, and success states
 
-### Phase 4: Authentication & Polish
-- [x] **Password Strength Indicator** (2026-01-21)
-  - Feature was already implemented in PasswordInput component
-  - Component location: src/components/auth/PasswordInput.tsx
-  - `showStrength` prop enables the 4-segment progress bar
-  - Checks: 8+ chars, uppercase letter, number, special character
-  - Color-coded levels: Weak (red), Fair (orange), Good (yellow), Strong (green)
-  - Text feedback with suggestions (e.g., "Fair · Add uppercase letter")
-  - Already enabled on all required pages:
-    - Signup page: src/app/(auth)/signup/page.tsx
-    - Reset Password page: src/app/(auth)/reset-password/page.tsx
-    - Change Password page: src/app/dashboard/account/page.tsx (PasswordTab)
+7. Updated guest property page:
+   - PropertyPageClient.tsx now checks accessMode
+   - Renders AccessRestricted component when property is invite-only
 
-- [x] **Google OAuth Login** (2026-01-21)
-  - Created GoogleButton component: src/components/auth/GoogleButton.tsx
-    - Reusable component with mode prop ("signin" | "signup")
-    - Uses Supabase Auth signInWithOAuth for Google provider
-    - Includes Google "G" logo SVG icon
-    - Loading state with spinner
-  - Added "Continue with Google" / "Sign up with Google" buttons:
-    - Login page: src/app/(auth)/login/page.tsx
-    - Signup page: src/app/(auth)/signup/page.tsx
-    - Styled with divider "or" between OAuth and email/password forms
-  - Added "Connections" tab to Account Settings page:
-    - src/app/dashboard/account/page.tsx
-    - Shows connected Google account status with email
-    - "Connect" button to link Google account (uses supabase.auth.linkIdentity)
-    - "Disconnect" button to unlink (uses supabase.auth.unlinkIdentity)
-    - Safety check: prevents disconnecting if it's the only login method
-  - Uses existing /auth/callback route for OAuth code exchange
-  - Exported GoogleButton from src/components/auth/index.ts
+### Files created:
+- supabase/migrations/20250123000000_add_access_mode.sql
+- src/components/property/AccessRestricted.tsx
 
-### Phase 5: Content & Analytics
-- [x] **Rich Text Formatting** (2026-01-21)
-  - Created RichTextEditor component: src/components/editor/RichTextEditor.tsx
-    - Built using @tiptap/react with StarterKit extension
-    - Toolbar with Bold, Italic, Bullet list, Numbered list buttons
-    - Character count display with configurable max length
-    - Placeholder support
-    - Mobile-friendly toolbar using Phosphor icons
-  - Utility functions exported from src/components/editor/index.ts:
-    - `sanitizeHtml`: XSS protection using isomorphic-dompurify
-    - `plainTextToHtml`: Backwards compatibility for existing plain text content
-    - `htmlToPlainText`: Extract plain text from HTML for previews
-  - Updated BasicInfoTab (src/app/dashboard/properties/[id]/tabs/BasicInfoTab.tsx):
-    - Replaced textarea with RichTextEditor for welcome message
-    - 500 character limit with live counter
-    - Auto-saves on content change (debounced 500ms)
-  - Updated CustomSectionsTab (src/app/dashboard/properties/[id]/tabs/CustomSectionsTab.tsx):
-    - Replaced textarea with RichTextEditor for section content
-    - Handles both legacy array format and new HTML format
-    - ContentPreview helper component for section card previews
-  - Updated PropertyHeader (src/components/property/PropertyHeader.tsx):
-    - Renders welcome message as sanitized HTML
-    - Prose styling for proper rich text display
-  - Updated PropertySections (src/components/property/PropertySections.tsx):
-    - StringList handles both legacy array and new HTML content
-    - Sanitizes HTML before rendering
-  - Added Tiptap styles to globals.css:
-    - Placeholder styling for empty editor
-  - Installed packages: @tiptap/react, @tiptap/pm, @tiptap/starter-kit, @tiptap/extension-character-count, isomorphic-dompurify
+### Files modified:
+- src/types/index.ts
+- src/lib/actions/properties.ts
+- src/lib/content/properties.ts
+- src/lib/utils/property-preview.ts
+- src/app/dashboard/properties/[id]/PropertyEditor.tsx
+- src/app/dashboard/properties/[id]/tabs/BasicInfoTab.tsx
+- src/app/stay/[slug]/PropertyPageClient.tsx
+- src/components/property/index.ts
+- src/content/properties/sliema-sanctuary.ts
+- PRD.md (marked 3.6.1 acceptance criteria as complete)
 
-- [x] **Property Templates** (2026-01-21)
-  - Created property templates system: src/lib/templates/property-templates.ts
-    - 4 templates: Blank, Apartment, House, Studio
-    - Each template includes pre-defined rules, appliances, and custom sections
-    - Type-safe template definitions with TypeScript interfaces
-  - Created TemplateSelector component: src/components/dashboard/TemplateSelector.tsx
-    - 2x2 grid of template cards with icons (File, Building, Home, Square)
-    - Visual selection state with checkmark and primary color highlight
-    - Responsive design, accessible with keyboard navigation
-  - Updated CreatePropertyForm: src/app/dashboard/properties/new/CreatePropertyForm.tsx
-    - Added template selector below location input
-    - Template ID passed to server action on form submission
-  - Updated createProperty server action: src/lib/actions/properties.ts
-    - Accepts optional template_id from form data
-    - Applies template content after property creation
-    - Creates house_rules section with pre-filled rules
-    - Creates appliances section with pre-filled appliances
-    - Creates custom sections from template (e.g., Building Access, Parking, Space Tips)
-  - Template content:
-    - Apartment: 5 rules, 4 appliances, 1 custom section (Building Access)
-    - House: 6 rules, 5 appliances, 2 custom sections (Parking, Garden & Outdoor)
-    - Studio: 4 rules, 3 appliances, 1 custom section (Space Tips)
-    - Blank: No pre-filled content (start from scratch)
+### Not yet implemented (future features):
+- Access code validation against guest_invites table (3.6.3)
+- Contact host email sending via Resend (3.6.6)
+- These depend on the Guest Invite Management feature (3.6.3)
 
-- [x] **Analytics Events Integration** (2026-01-21)
-  - Created analytics utility module: src/lib/analytics/index.ts
-    - `track(eventName, data)`: Main tracking function with type-safe events
-    - `trackEvent(event)`: Alternative API accepting event object
-    - `identifyUser(userId, traits)`: User identification for analytics
-    - `resetUser()`: Reset identity on logout
-  - TypeScript types for all event types with discriminated unions
-  - Console logging in development mode (purple styled logs)
-  - Ready for analytics provider integration (commented examples for PostHog, Mixpanel, Amplitude)
-  - Events integrated across the application:
-    - Dashboard: `dashboard_viewed` with property_count
-    - Property: `property_edited`, `property_published`, `property_unpublished`, `property_deleted`
-    - Preview: `preview_toggled`, `preview_opened`
-    - QR Code: `qr_downloaded` (format, size), `qr_template_downloaded`, `qr_link_copied`
-    - Guest page: `property_viewed`, `wifi_copied`
-    - Auth: `login_started/completed/failed`, `signup_started/completed/failed`, `logout`
-    - Password reset: `password_reset_requested`, `password_reset_completed`
-    - Google OAuth: tracking via GoogleButton component
-  - Added `id` field to Property type in src/types/index.ts
-  - Updated property loaders to include id:
-    - src/lib/content/properties.ts
-    - src/lib/utils/property-preview.ts
-    - src/content/properties/sliema-sanctuary.ts
-  - Created DashboardTracker client component for server-rendered dashboard
-
-### Phase 6: Performance
-- [x] **Offline Caching for Guest Pages** (2026-01-21)
-  - Created custom service worker: public/sw.js
-    - Caches property pages on first visit using Cache API
-    - Handles static assets (JS, CSS, images) with cache-first strategy
-    - Caches property data to localStorage as backup
-    - Cache invalidation using property ID as version
-  - Created offline indicator component: src/components/property/OfflineIndicator.tsx
-    - Shows amber banner when offline with cached data available
-    - Shows red banner when offline without cached data
-    - Uses Phosphor icons (CloudCheck, CloudSlash)
-    - Exported OfflineBadge for compact use in headers
-  - Created useOffline hook: src/hooks/useOffline.ts
-    - Tracks online/offline status via navigator.onLine and events
-    - Registers service worker on mount
-    - Caches property data to localStorage (7-day expiry)
-    - Sends property data to service worker for Cache API storage
-    - Exports utility functions: getCacheVersion, clearPropertyCache, clearAllPropertyCaches
-  - Created hooks index: src/hooks/index.ts
-  - Created PWA manifest: public/manifest.json
-    - App name, icons, theme colors, standalone display mode
-  - Created offline fallback page: public/offline.html
-    - Friendly "You're offline" message with retry button
-    - Shows notice if cached property data is available
-  - Created placeholder PWA icons: public/icons/icon-192.svg, icon-512.svg
-  - Updated PropertyPageClient: src/app/stay/[slug]/PropertyPageClient.tsx
-    - Integrated useOffline hook to cache property data on visit
-    - Added OfflineIndicator component to show offline status
-  - Updated root layout: src/app/layout.tsx
-    - Added manifest.json link in metadata
-  - Works only on /stay/[slug] guest pages as specified
-
-## PRD Status
-All features in the PRD have been implemented. The project is complete.
+### Notes:
+- Build currently fails due to pre-existing missing embla-carousel-react dependency in landing page components (unrelated to this feature)
+- TypeScript and ESLint pass for all files modified in this feature

@@ -9,6 +9,7 @@ import {
   PropertySections,
   BottomNavigation,
   OfflineIndicator,
+  AccessRestricted,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property } from "@/types";
@@ -31,6 +32,13 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
   useEffect(() => {
     track("property_viewed", { property_id: property.id, slug: property.slug });
   }, [property.id, property.slug]);
+
+  // Check if property is invite-only and user doesn't have access
+  // For now, always show restricted page for invite-only properties
+  // In the future, this will check for valid access codes/invites
+  if (property.accessMode === "invite_only") {
+    return <AccessRestricted property={property} />;
+  }
 
   const handleWifiCopySuccess = () => {
     showToast("Password copied!", "success");

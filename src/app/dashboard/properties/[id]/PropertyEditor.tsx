@@ -13,6 +13,8 @@ import {
   Copy,
   Eye,
   EyeOff,
+  Globe,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui";
 import {
@@ -366,6 +368,18 @@ export function PropertyEditor({
               <span className="text-muted-foreground">
                 {property.status === "published" ? "Published" : "Draft"}
               </span>
+              <span className="text-muted-foreground/50">|</span>
+              {property.access_mode === "invite_only" ? (
+                <span className="flex items-center gap-1 text-amber-600">
+                  <Lock className="h-3 w-3" />
+                  <span className="hidden sm:inline">Invite-Only</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-green-600">
+                  <Globe className="h-3 w-3" />
+                  <span className="hidden sm:inline">Public</span>
+                </span>
+              )}
               {saveStatus === "saving" && (
                 <span className="ml-2 flex items-center text-muted-foreground">
                   <Loader2 className="mr-1 h-3 w-3 animate-spin" />

@@ -41,6 +41,9 @@ export interface PropertySection {
   content: PropertyRule[] | Appliance[] | string[];
 }
 
+// Access mode for guest access control
+export type PropertyAccessMode = "public" | "invite_only";
+
 export interface Property {
   id: string;
   slug: string;
@@ -54,6 +57,7 @@ export interface Property {
   hostPhotoUrl?: string;
   heroImageUrl?: string;
   checkoutTime: string;
+  accessMode: PropertyAccessMode;
   wifi: {
     networks: WiFiNetwork[];
   };

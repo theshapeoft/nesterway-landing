@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import { Globe, Lock } from "lucide-react";
 import { FormField } from "@/components/auth/FormField";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import { RichTextEditor, plainTextToHtml } from "@/components/editor";
@@ -23,6 +24,9 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
   const [welcomeMessage, setWelcomeMessage] = useState<string>(
     // Convert plain text to HTML if needed for backwards compatibility
     plainTextToHtml(property.welcome_message || "")
+  );
+  const [accessMode, setAccessMode] = useState<"public" | "invite_only">(
+    property.access_mode || "public"
   );
 
   const handleChange = () => {
@@ -80,12 +84,19 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
     }, 500);
   }, [onSave]);
 
+  const handleAccessModeChange = (mode: "public" | "invite_only") => {
+    setAccessMode(mode);
+    // Trigger save immediately
+    setTimeout(triggerSave, 0);
+  };
+
   return (
     <form ref={formRef} onChange={handleChange} className="space-y-6">
-      {/* Hidden inputs for image URLs and welcome message */}
+      {/* Hidden inputs for image URLs, welcome message, and access mode */}
       <input type="hidden" name="host_photo_url" value={hostPhotoUrl || ""} />
       <input type="hidden" name="hero_image_url" value={heroImageUrl || ""} />
       <input type="hidden" name="welcome_message" value={welcomeMessage || ""} />
+      <input type="hidden" name="access_mode" value={accessMode} />
       <FormField
         label="Property Name"
         name="name"
@@ -169,6 +180,67 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
             defaultValue={property.checkout_time || "11:00"}
             className="w-32 rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="mb-4 font-medium text-foreground">Access Control</h3>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Control who can view your property guide.
+        </p>
+
+        <div className="space-y-3">
+          <label
+            className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${
+              accessMode === "public"
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-primary/50"
+            }`}
+          >
+            <input
+              type="radio"
+              name="access_mode_radio"
+              value="public"
+              checked={accessMode === "public"}
+              onChange={() => handleAccessModeChange("public")}
+              className="mt-1"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-green-600" />
+                <span className="font-medium">Public</span>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Anyone with the link or QR code can view your guide.
+              </p>
+            </div>
+          </label>
+
+          <label
+            className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${
+              accessMode === "invite_only"
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-primary/50"
+            }`}
+          >
+            <input
+              type="radio"
+              name="access_mode_radio"
+              value="invite_only"
+              checked={accessMode === "invite_only"}
+              onChange={() => handleAccessModeChange("invite_only")}
+              className="mt-1"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <Lock className="h-4 w-4 text-amber-600" />
+                <span className="font-medium">Invite-Only</span>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Only guests with an access code can view your guide.
+              </p>
+            </div>
+          </label>
         </div>
       </div>
     </form>
