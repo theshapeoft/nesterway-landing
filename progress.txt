@@ -444,3 +444,48 @@
 - ESLint passes for new/modified files (pre-existing errors in landing page components unrelated)
 - No test script exists in this project
 - Feature 3.6.5 is now fully complete
+
+---
+
+## 2026-01-23: Implemented Contact Host Form for Blocked Access (Feature 3.6.6)
+
+### What was done:
+1. Created database migration (`20250123000003_add_access_requests.sql`):
+   - Created `access_requests` table for storing contact requests and rate limiting
+   - Added indexes for rate limit checks (property + email + time)
+   - Added RLS policies: anyone can insert, hosts can view/delete their properties' requests
+
+2. Created API route for access request emails (`src/app/api/request-access/route.ts`):
+   - Validates required fields (propertyId, guestName, guestEmail)
+   - Validates email format and message length (500 chars max)
+   - Rate limiting: 1 request per email per property per 24 hours
+   - Fetches property and host profile from database
+   - Sends branded email to host via Resend with:
+     - Subject: "Access Request for [Property Name]"
+     - Guest name, email, and optional message
+     - "Create Invite" button linking to invites page with email pre-filled
+     - Reply-to set to guest email
+   - Records request in database for rate limiting
+
+3. Updated AccessRestricted component (`src/components/property/AccessRestricted.tsx`):
+   - Contact form now calls `/api/request-access` API
+   - Added `contactError` state for displaying errors
+   - Error display below form fields
+   - Proper handling of rate limit errors (429 response)
+   - Clears error when canceling form
+
+### Files created:
+- supabase/migrations/20250123000003_add_access_requests.sql
+- src/app/api/request-access/route.ts
+
+### Files modified:
+- src/components/property/AccessRestricted.tsx (real API integration)
+- PRD.md (marked 3.6.6 acceptance criteria as complete)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes for new/modified files
+- No test script exists in this project
+- Feature 3.6.6 is now fully complete
+- This completes all features in section 3.6 (Guest Access Control & Invites)

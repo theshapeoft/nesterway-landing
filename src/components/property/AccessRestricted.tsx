@@ -61,6 +61,7 @@ export function AccessRestricted({ property, onAccessGranted }: AccessRestricted
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [contactError, setContactError] = useState<string | null>(null);
 
   const handleAccessCodeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -104,12 +105,47 @@ export function AccessRestricted({ property, onAccessGranted }: AccessRestricted
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setContactError(null);
 
-    // For now, just show success message
-    // In the future, this will send an email via Resend
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setContactSubmitted(true);
-    setIsSubmitting(false);
+    // Client-side validation
+    if (!contactName.trim()) {
+      setContactError("Please enter your name");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!contactEmail.trim()) {
+      setContactError("Please enter your email");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/request-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.id,
+          guestName: contactName.trim(),
+          guestEmail: contactEmail.trim(),
+          message: contactMessage.trim() || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setContactError(data.error || "Failed to send request. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      setContactSubmitted(true);
+    } catch {
+      setContactError("Unable to send request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClassName =
@@ -273,12 +309,19 @@ export function AccessRestricted({ property, onAccessGranted }: AccessRestricted
                 </p>
               </div>
 
+              {contactError && (
+                <p className="text-sm text-destructive">{contactError}</p>
+              )}
+
               <div className="flex gap-2">
                 <Button
                   type="button"
                   variant="secondary"
                   className="flex-1"
-                  onClick={() => setShowContactForm(false)}
+                  onClick={() => {
+                    setShowContactForm(false);
+                    setContactError(null);
+                  }}
                 >
                   Cancel
                 </Button>

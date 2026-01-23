@@ -568,22 +568,22 @@ John Doe,john@example.com,2,2026-01-15 14:30:00,192.168.1.1
 **User Story:** As a guest without an invite code, I want to request access from the host, so I can view the guide if needed.
 
 **Acceptance Criteria:**
-- [ ] Blocked access page shows:
+- [x] Blocked access page shows:
   - Heading: "Access Restricted"
   - Message: "This guide is invite-only. To request access, contact the host or enter your access code below."
   - Two options:
     1. "Enter Access Code" input + Submit button
     2. "Contact Host for Access" button
-- [ ] Contact form modal:
+- [x] Contact form modal:
   - Your name (required)
   - Your email (required)
   - Message (optional, 500 chars max)
   - [Send Request] button
-- [ ] Form submission:
+- [x] Form submission:
   - Sends email to host via Resend
   - Success message: "Your request sent. Host will contact you directly."
   - Rate limit: 1 request per email per 24 hours
-- [ ] Email to host:
+- [x] Email to host:
   - Subject: "Access Request for [Property Name]"
   - Guest details + message
   - Quick action link: "Create Invite" (pre-fills email)
