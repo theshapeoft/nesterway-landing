@@ -76,6 +76,30 @@ export interface GuestRegistration {
   registeredAt: string;
 }
 
+// Guest invite status for time-limited access
+export type GuestInviteStatus = "pending" | "active" | "expired" | "revoked";
+
+// Guest invite for invite-only property access
+export interface GuestInvite {
+  id: string;
+  propertyId: string;
+  guestName: string;
+  guestEmail: string;
+  checkInDate: string;
+  checkOutDate: string;
+  leadTimeDays: number;
+  postCheckoutDays: number;
+  accessCode: string;
+  customMessage?: string;
+  status: GuestInviteStatus;
+  emailSentAt?: string;
+  emailResendCount: number;
+  lastResendAt?: string;
+  lastAccessedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Area Types
 export interface Recommendation {
   id: string;

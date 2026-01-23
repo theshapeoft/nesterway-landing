@@ -6,5 +6,5 @@ export { PropertySections } from "./PropertySections";
 export { ExploreCTA } from "./ExploreCTA";
 export { BottomNavigation } from "./BottomNavigation";
 export { OfflineIndicator, OfflineBadge } from "./OfflineIndicator";
-export { AccessRestricted } from "./AccessRestricted";
+export { AccessRestricted, getStoredAccessCode } from "./AccessRestricted";
 export { GuestRegistrationGate, isGuestRegistered } from "./GuestRegistrationGate";

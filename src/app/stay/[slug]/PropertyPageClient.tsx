@@ -12,6 +12,7 @@ import {
   AccessRestricted,
   GuestRegistrationGate,
   isGuestRegistered,
+  getStoredAccessCode,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property } from "@/types";
@@ -32,6 +33,37 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
 
   // Check if guest registration is needed
   const [needsRegistration, setNeedsRegistration] = useState<boolean | null>(null);
+  // Check if invite-only property needs access validation
+  const [needsAccessCode, setNeedsAccessCode] = useState<boolean | null>(null);
+
+  // Check access code status on mount (client-side only for invite-only properties)
+  useEffect(() => {
+    if (property.accessMode === "invite_only") {
+      const storedCode = getStoredAccessCode(property.id);
+      if (storedCode) {
+        // Validate the stored code is still valid
+        fetch("/api/validate-access-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            propertyId: property.id,
+            accessCode: storedCode,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setNeedsAccessCode(!data.valid);
+          })
+          .catch(() => {
+            setNeedsAccessCode(true);
+          });
+      } else {
+        setNeedsAccessCode(true);
+      }
+    } else {
+      setNeedsAccessCode(false);
+    }
+  }, [property.id, property.accessMode]);
 
   // Check registration status on mount (client-side only)
   useEffect(() => {
@@ -47,24 +79,32 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
     setNeedsRegistration(false);
   }, []);
 
+  // Handle access granted (for invite-only properties)
+  const handleAccessGranted = useCallback(() => {
+    setNeedsAccessCode(false);
+  }, []);
+
   // Track page view on mount (this represents a QR scan or direct visit)
   useEffect(() => {
     track("property_viewed", { property_id: property.id, slug: property.slug });
   }, [property.id, property.slug]);
 
-  // Check if property is invite-only and user doesn't have access
-  // For now, always show restricted page for invite-only properties
-  // In the future, this will check for valid access codes/invites
-  if (property.accessMode === "invite_only") {
-    return <AccessRestricted property={property} />;
-  }
-
-  // Show loading state while checking registration status
-  if (needsRegistration === null) {
+  // Show loading state while checking access code or registration status
+  if (needsAccessCode === null || needsRegistration === null) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
+    );
+  }
+
+  // Show access restricted page for invite-only properties without valid access
+  if (needsAccessCode) {
+    return (
+      <AccessRestricted
+        property={property}
+        onAccessGranted={handleAccessGranted}
+      />
     );
   }
 

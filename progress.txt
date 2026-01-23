@@ -138,3 +138,71 @@
 - ESLint passes for all modified files
 - Registration data is stored in guest_registrations table for host access/export (Feature 3.6.5)
 - RLS policies ensure only property owners can view registrations for their properties
+
+---
+
+## 2026-01-23: Implemented Guest Invite Database Schema and Access Code Validation (Foundation for 3.6.3 & 3.6.4)
+
+### What was done:
+1. Created database migration (`20250123000002_add_guest_invites.sql`):
+   - Created `guest_invites` table with all required fields from PRD
+   - Added indexes for property_id, access_code, guest_email, status, and dates
+   - Created `generate_access_code()` function for 8-character uppercase codes
+   - Created trigger for auto-updating `updated_at` timestamp
+   - Added RLS policies for property owners to manage invites
+   - Added policy allowing anyone to validate access codes
+
+2. Updated TypeScript types:
+   - Added `GuestInviteStatus` type ("pending" | "active" | "expired" | "revoked")
+   - Added `GuestInvite` interface with all fields from database schema
+
+3. Created API route for access code validation:
+   - `src/app/api/validate-access-code/route.ts`
+   - Validates access code against property
+   - Calculates access window based on check-in/out dates and lead/post-checkout days
+   - Returns appropriate error messages (not yet available, expired, revoked, invalid)
+   - Updates invite status and last_accessed_at on successful validation
+   - Automatic status transition from "pending" to "active" when accessed within window
+
+4. Updated AccessRestricted component:
+   - Now validates access codes via API instead of showing placeholder error
+   - Added `onAccessGranted` callback prop to notify parent when access is granted
+   - Added localStorage persistence for validated access codes (30-day expiry)
+   - Added `getStoredAccessCode()` helper function for checking stored codes
+   - Added loading spinner during validation
+
+5. Updated PropertyPageClient:
+   - Added `needsAccessCode` state for invite-only properties
+   - On mount, checks for stored access code and validates it via API
+   - Shows loading state while validating
+   - Passes `onAccessGranted` callback to AccessRestricted component
+   - Proper flow: validate stored code → show restricted page if needed → grant access on valid code
+
+6. Fixed pre-existing build issue:
+   - Installed missing `embla-carousel-react` dependency
+
+### Files created:
+- supabase/migrations/20250123000002_add_guest_invites.sql
+- src/app/api/validate-access-code/route.ts
+
+### Files modified:
+- src/types/index.ts (added GuestInvite and GuestInviteStatus types)
+- src/components/property/AccessRestricted.tsx (access code validation)
+- src/components/property/index.ts (export getStoredAccessCode)
+- src/app/stay/[slug]/PropertyPageClient.tsx (access code flow)
+- PRD.md (marked 3.6.4 "Real-time validation on guest page access" as complete)
+- package.json and package-lock.json (added embla-carousel-react)
+
+### What's still needed for full 3.6.3:
+- Invites tab in dashboard navigation
+- Create invite form
+- Invite list with status badges
+- Email sending via Resend
+- Resend email functionality with rate limiting
+- Edit/Delete invite actions
+
+### Notes:
+- Build passes (npm run build succeeds)
+- ESLint passes for all modified files
+- No test script exists in this project
+- Access code validation is production-ready and can be used once invites are created manually in the database

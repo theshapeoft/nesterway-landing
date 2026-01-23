@@ -7,12 +7,53 @@ import type { Property } from "@/types";
 
 interface AccessRestrictedProps {
   property: Property;
+  onAccessGranted?: () => void;
 }
 
-export function AccessRestricted({ property }: AccessRestrictedProps) {
+const ACCESS_CODE_STORAGE_KEY = "travelama_access_codes";
+
+// Store validated access code in localStorage with 30-day expiry
+function storeAccessCode(propertyId: string, accessCode: string) {
+  try {
+    const existing = localStorage.getItem(ACCESS_CODE_STORAGE_KEY);
+    const codes = existing ? JSON.parse(existing) : {};
+    codes[propertyId] = {
+      code: accessCode,
+      validatedAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    };
+    localStorage.setItem(ACCESS_CODE_STORAGE_KEY, JSON.stringify(codes));
+  } catch {
+    // localStorage might be unavailable
+  }
+}
+
+// Check if there's a previously validated access code
+export function getStoredAccessCode(propertyId: string): string | null {
+  try {
+    const existing = localStorage.getItem(ACCESS_CODE_STORAGE_KEY);
+    if (!existing) return null;
+    const codes = JSON.parse(existing);
+    const stored = codes[propertyId];
+    if (!stored) return null;
+    // Check if expired
+    if (new Date(stored.expiresAt) < new Date()) {
+      // Clean up expired code
+      delete codes[propertyId];
+      localStorage.setItem(ACCESS_CODE_STORAGE_KEY, JSON.stringify(codes));
+      return null;
+    }
+    return stored.code;
+  } catch {
+    return null;
+  }
+}
+
+export function AccessRestricted({ property, onAccessGranted }: AccessRestrictedProps) {
   const [showContactForm, setShowContactForm] = useState(false);
   const [accessCode, setAccessCode] = useState("");
   const [accessCodeError, setAccessCodeError] = useState<string | null>(null);
+  const [isValidating, setIsValidating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
@@ -25,14 +66,39 @@ export function AccessRestricted({ property }: AccessRestrictedProps) {
     e.preventDefault();
     setAccessCodeError(null);
 
-    if (!accessCode.trim()) {
+    const trimmedCode = accessCode.trim();
+    if (!trimmedCode) {
       setAccessCodeError("Please enter an access code");
       return;
     }
 
-    // For now, just show an error since invite management isn't implemented yet
-    // In the future, this will validate against the guest_invites table
-    setAccessCodeError("Invalid access code. Please check and try again.");
+    setIsValidating(true);
+
+    try {
+      const response = await fetch("/api/validate-access-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.id,
+          accessCode: trimmedCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        // Store the validated access code
+        storeAccessCode(property.id, trimmedCode.toUpperCase());
+        // Grant access
+        onAccessGranted?.();
+      } else {
+        setAccessCodeError(data.error || "Invalid access code. Please check and try again.");
+      }
+    } catch {
+      setAccessCodeError("Unable to validate access code. Please try again.");
+    } finally {
+      setIsValidating(false);
+    }
   };
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -102,8 +168,12 @@ export function AccessRestricted({ property }: AccessRestrictedProps) {
                   maxLength={8}
                   className={`${inputClassName} font-mono uppercase tracking-widest`}
                 />
-                <Button type="submit" variant="accent">
-                  <ArrowRight className="h-4 w-4" />
+                <Button type="submit" variant="accent" disabled={isValidating}>
+                  {isValidating ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               {accessCodeError && (
