@@ -206,3 +206,41 @@
 - ESLint passes for all modified files
 - No test script exists in this project
 - Access code validation is production-ready and can be used once invites are created manually in the database
+
+---
+
+## 2026-01-23: Added Invites Tab to Main Navigation (Feature 3.6.3 - Partial)
+
+### What was done:
+1. Added main navigation to DashboardHeader:
+   - Three navigation tabs: Guides, Invites, Help Center
+   - Active state highlighting based on current route
+   - Responsive design (icons only on small screens, icons + labels on desktop)
+   - "Guides" tab is active for /dashboard and /dashboard/properties/* routes
+
+2. Created Invites page with empty state:
+   - New route at `/dashboard/invites`
+   - Header with "Guest Invites" title and description
+   - "Create Invite" button (currently disabled as form is not yet implemented)
+   - Empty state with icon, message, and CTA button
+
+### Files created:
+- src/app/dashboard/invites/page.tsx
+
+### Files modified:
+- src/components/dashboard/DashboardHeader.tsx (added navigation tabs)
+- PRD.md (marked "New Invites tab in main navigation" and "Empty state" as complete)
+
+### What's still needed for full 3.6.3:
+- Create invite form with all fields
+- Invite list with status badges
+- Email sending via Resend
+- Resend email functionality with rate limiting
+- Edit/Delete invite actions
+- Dashboard widget for "Invites Created" count
+
+### Notes:
+- Build passes (npm run build succeeds)
+- ESLint passes for all modified files
+- TypeScript passes (npx tsc --noEmit)
+- Help Center page route does not exist yet (/dashboard/help)

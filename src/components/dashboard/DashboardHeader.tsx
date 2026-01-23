@@ -2,11 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Compass, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import {
+  Compass,
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+  Home,
+  Mail,
+  HelpCircle,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { track, resetUser } from "@/lib/analytics";
+
+const navItems = [
+  { href: "/dashboard", label: "Guides", icon: Home },
+  { href: "/dashboard/invites", label: "Invites", icon: Mail },
+  { href: "/dashboard/help", label: "Help Center", icon: HelpCircle },
+] as const;
 
 interface DashboardHeaderProps {
   user: SupabaseUser;
@@ -14,9 +29,21 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const userName = user.user_metadata?.full_name || user.email?.split("@")[0] || "User";
+  const userName =
+    user.user_metadata?.full_name || user.email?.split("@")[0] || "User";
+
+  const isActiveNav = (href: string) => {
+    if (href === "/dashboard") {
+      // "Guides" is active for /dashboard, /dashboard/properties/*
+      return (
+        pathname === "/dashboard" || pathname.startsWith("/dashboard/properties")
+      );
+    }
+    return pathname.startsWith(href);
+  };
 
   const handleLogout = async () => {
     track("logout", {});
@@ -35,8 +62,32 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Compass className="h-4 w-4" />
           </div>
-          <span className="font-semibold text-foreground">Travelama</span>
+          <span className="font-semibold text-foreground hidden sm:block">
+            Travelama
+          </span>
         </Link>
+
+        {/* Main Navigation */}
+        <nav className="flex items-center gap-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = isActiveNav(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                <span className="hidden md:block">{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
         {/* User Menu */}
         <div className="relative">

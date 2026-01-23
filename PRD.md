@@ -435,7 +435,7 @@ CREATE INDEX idx_guest_registrations_email ON guest_registrations(email);
 **User Story:** As a host, I want to create time-limited invites for specific guests with check-in/out dates, so I can control when and how long they access my guide.
 
 **Acceptance Criteria:**
-- [ ] New "Invites" tab in main navigation (Dashboard, Guides, **Invites**, Help Center)
+- [x] New "Invites" tab in main navigation (Dashboard, Guides, **Invites**, Help Center)
 - [ ] "Create Invite" button opens form:
   - Guest name (required)
   - Guest email (required)
@@ -461,7 +461,7 @@ CREATE INDEX idx_guest_registrations_email ON guest_registrations(email);
   - Actions dropdown: Resend Email, Edit, Delete
 - [ ] Resend limit: Max 2 resends per 24 hours per invite
 - [ ] Dashboard widget: "Invites Created" count
-- [ ] Empty state: "No invites yet. Create your first invite to get started."
+- [x] Empty state: "No invites yet. Create your first invite to get started."
 
 **Email Template:**
 ```
