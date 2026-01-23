@@ -774,3 +774,60 @@
 - TypeScript passes (npx tsc --noEmit)
 - ESLint passes with 0 errors (only pre-existing warnings)
 - No test script exists in this project
+
+---
+
+## 2026-01-23: Implemented Full Guide PDF Generation (Feature 3.1.4 - Complete)
+
+### What was done:
+1. Created server action for fetching PDF data (`src/lib/actions/pdf-export.ts`):
+   - `getPropertyPdfData()` fetches all property data needed for PDF
+   - Includes WiFi networks, house rules, appliances, emergency contacts
+   - Includes custom sections and map pins
+   - Proper data transformation from database format
+
+2. Updated QrCodeTab with full PDF generation:
+   - `generateFullGuidePdf()` function using jsPDF
+   - Professional cover page with property name, location, host info
+   - Table of contents with page numbers
+   - WiFi section with network names and passwords
+   - House rules section with critical rules highlighted
+   - Appliances section with locations and instructions
+   - Emergency contacts section
+   - Custom sections
+   - Local recommendations from map pins (grouped by category)
+   - Automatic page breaks for long content
+   - Page numbers on all pages (except cover)
+   - Optional Travelama branding in footer
+   - Filename format: `[property-slug]-guide-[YYYY-MM-DD].pdf`
+
+3. Added analytics event:
+   - Added `pdf_downloaded` event type to analytics module
+   - Tracks property_id, sections_included, and branded flag
+
+4. Customization options implemented:
+   - Toggle sections: WiFi, Rules, Appliances, Emergency, Custom Sections, Map
+   - Toggle Travelama branding
+   - All options respected in PDF generation
+
+### Files created:
+- src/lib/actions/pdf-export.ts
+
+### Files modified:
+- src/app/dashboard/properties/[id]/tabs/QrCodeTab.tsx (full PDF generation)
+- src/lib/analytics/index.ts (added pdf_downloaded event)
+- PRD.md (marked 3.1.4 acceptance criteria as complete)
+
+### Technical approach:
+- Used client-side jsPDF instead of server-side Puppeteer
+- This approach works in serverless environments (Vercel)
+- No additional dependencies needed (jsPDF already installed)
+- Server action fetches data, client generates PDF
+
+### Notes:
+- Build passes (npm run build succeeds)
+- TypeScript passes (npx tsc --noEmit)
+- ESLint passes with 0 errors (only pre-existing warnings)
+- No test script exists in this project
+- Feature 3.1.4 is now fully complete
+- All P1 features in the PRD are now complete

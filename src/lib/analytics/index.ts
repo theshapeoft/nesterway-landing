@@ -35,6 +35,8 @@ export type AnalyticsEvent =
   | { name: "map_tab_viewed"; data: { property_id: string } }
   // Data export events
   | { name: "data_exported_csv"; data: { property_id: string; count: number } }
+  // PDF export events
+  | { name: "pdf_downloaded"; data: { property_id: string; sections_included: string[]; branded: boolean } }
   // Auth events
   | { name: "signup_started"; data: { method: "email" | "google" } }
   | { name: "signup_completed"; data: { method: "email" | "google"; user_id?: string } }
