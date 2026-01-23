@@ -71,13 +71,13 @@ This PRD covers the completion of documented but unimplemented features for Trav
 **User Story:** As a host, I want to download my QR code in PNG, SVG, and PDF formats at different sizes, so that I can use it for digital displays and professional printing.
 
 **Acceptance Criteria:**
-- [ ] Three download buttons: PNG, SVG, PDF
-- [ ] Size selector: Small (200px), Medium (400px), Large (800px)
-- [ ] PNG: 300dpi for print quality
-- [ ] SVG: Vector format, scalable
-- [ ] PDF: Vector, A4/Letter page with QR centered
-- [ ] All formats include property name and URL below QR
-- [ ] Downloads trigger immediately on click
+- [x] Three download buttons: PNG, SVG, PDF
+- [x] Size selector: Small (200px), Medium (400px), Large (800px)
+- [x] PNG: 300dpi for print quality
+- [x] SVG: Vector format, scalable
+- [x] PDF: Vector, A4/Letter page with QR centered
+- [x] All formats include property name and URL below QR
+- [x] Downloads trigger immediately on click
 
 **Technical Notes:**
 - Use `qrcode` library for generation (already installed)
@@ -91,10 +91,10 @@ This PRD covers the completion of documented but unimplemented features for Trav
 **User Story:** As a host, I want to optionally include Travelama branding on my QR code downloads, so that I can choose between branded and clean versions.
 
 **Acceptance Criteria:**
-- [ ] Checkbox: "Include Travelama branding" (default: checked)
-- [ ] Branded version: Includes "travelama.com" text and logo watermark
-- [ ] Unbranded version: QR code, property name, and direct URL only
-- [ ] Preview updates in real-time based on toggle
+- [x] Checkbox: "Include Travelama branding" (default: checked)
+- [x] Branded version: Includes "travelama.com" text and logo watermark
+- [x] Unbranded version: QR code, property name, and direct URL only
+- [x] Preview updates in real-time based on toggle
 
 ---
 
@@ -103,11 +103,11 @@ This PRD covers the completion of documented but unimplemented features for Trav
 **User Story:** As a host, I want to download print-ready templates (tent cards, wall signs), so that I can professionally display QR codes in my property.
 
 **Acceptance Criteria:**
-- [ ] Template selector with preview thumbnails
-- [ ] **Tent Card Template:** Foldable design, QR + "Scan for Property Info" + feature list
-- [ ] **Wall/Door Sign Template:** Portrait orientation, "Welcome!" heading + QR + instructions
-- [ ] Templates available in PDF format (print-ready, with bleed marks)
-- [ ] Customizable property name on templates
+- [x] Template selector with preview thumbnails
+- [x] **Tent Card Template:** Foldable design, QR + "Scan for Property Info" + feature list
+- [x] **Wall/Door Sign Template:** Portrait orientation, "Welcome!" heading + QR + instructions
+- [x] Templates available in PDF format (print-ready, with bleed marks)
+- [x] Customizable property name on templates
 
 **Template Designs:**
 ```
@@ -180,12 +180,12 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host, I want to reorder Wi-Fi networks, house rules, and appliances by dragging them, so that I can prioritize the most important items for my guests.
 
 **Acceptance Criteria:**
-- [ ] Drag handle (≡) appears on left side of each list item
-- [ ] Items can be dragged to reorder within their list
-- [ ] Visual feedback: lifted item has shadow, opacity 0.9; placeholder shows drop position
-- [ ] Keyboard alternative: Up/Down buttons for accessibility
-- [ ] Order persists via auto-save after drop
-- [ ] Works on touch devices (mobile/tablet)
+- [x] Drag handle (≡) appears on left side of each list item
+- [x] Items can be dragged to reorder within their list
+- [x] Visual feedback: lifted item has shadow, opacity 0.9; placeholder shows drop position
+- [x] Keyboard alternative: Up/Down buttons for accessibility
+- [x] Order persists via auto-save after drop
+- [x] Works on touch devices (mobile/tablet)
 
 **Applies to:**
 - Wi-Fi networks (`/dashboard/properties/[id]` → Wi-Fi tab)
@@ -234,13 +234,13 @@ Tent Card:                      Wall Sign:
 **User Story:** As a host, I want to upload my photo to the Basic Info tab, so that guests see a personal touch when viewing my property page.
 
 **Acceptance Criteria:**
-- [ ] Upload button in Basic Info tab under "Host Details" section
-- [ ] 80x80px circular preview with rounded-lg styling
-- [ ] Accepts JPG, PNG, WebP (max 5MB)
-- [ ] Image cropped/resized to 200x200px on upload
-- [ ] Stored in Supabase Storage bucket
-- [ ] Remove/replace photo option
-- [ ] Placeholder icon when no photo uploaded
+- [x] Upload button in Basic Info tab under "Host Details" section
+- [x] 80x80px circular preview with rounded-lg styling
+- [x] Accepts JPG, PNG, WebP (max 5MB)
+- [x] Image cropped/resized to 200x200px on upload
+- [x] Stored in Supabase Storage bucket
+- [x] Remove/replace photo option
+- [x] Placeholder icon when no photo uploaded
 
 **Technical Notes:**
 - ImageUpload component exists — integrate with Supabase Storage
