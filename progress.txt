@@ -324,3 +324,38 @@
 - TypeScript passes (npx tsc --noEmit)
 - Pre-existing lint warnings/errors in landing page components (unrelated)
 - No test script exists in this project
+
+---
+
+## 2026-01-23: Added Dashboard Widget for Invites Created Count (Feature 3.6.3 - Final Item)
+
+### What was done:
+1. Created `DashboardStats` component:
+   - `src/components/dashboard/DashboardStats.tsx`
+   - Displays property count and invites created count in a 2-column grid
+   - Property count shows Home icon with count and label
+   - Invites count links to /dashboard/invites page with hover effects
+   - Uses Ticket icon for invites, responsive design
+   - Proper singular/plural handling ("1 Invite" vs "2 Invites")
+
+2. Updated dashboard page:
+   - `src/app/dashboard/page.tsx` now fetches invites using `getInvites()`
+   - Parallel fetching of properties and invites with `Promise.all()`
+   - Renders `DashboardStats` widget between header and properties grid
+
+3. Exported new component:
+   - Added `DashboardStats` to `src/components/dashboard/index.ts`
+
+### Files created:
+- src/components/dashboard/DashboardStats.tsx
+
+### Files modified:
+- src/components/dashboard/index.ts (export DashboardStats)
+- src/app/dashboard/page.tsx (fetch invites, render stats widget)
+- PRD.md (marked "Dashboard widget: Invites Created count" as complete)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- ESLint passes for new/modified files
+- TypeScript passes (npx tsc --noEmit)
+- Feature 3.6.3 is now fully complete

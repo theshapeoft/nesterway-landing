@@ -3,8 +3,10 @@ import { Plus, Home } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 import { getProperties } from "@/lib/actions/properties";
+import { getInvites } from "@/lib/actions/invites";
 import { PropertyCard } from "@/components/dashboard/PropertyCard";
 import { DashboardTracker } from "@/components/dashboard/DashboardTracker";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -13,7 +15,10 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "there";
-  const properties = await getProperties();
+  const [properties, invites] = await Promise.all([
+    getProperties(),
+    getInvites(),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -35,6 +40,13 @@ export default async function DashboardPage() {
           </Button>
         </Link>
       </div>
+
+      {/* Stats */}
+      <DashboardStats
+        propertyCount={properties.length}
+        inviteCount={invites.length}
+        className="mb-8"
+      />
 
       {/* Properties Grid */}
       {properties.length === 0 ? (

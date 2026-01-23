@@ -1,4 +1,5 @@
 export { DashboardHeader } from "./DashboardHeader";
+export { DashboardStats } from "./DashboardStats";
 export { LocationInput } from "./LocationInput";
 export type { LocationData } from "./LocationInput";
 export { TemplateSelector } from "./TemplateSelector";

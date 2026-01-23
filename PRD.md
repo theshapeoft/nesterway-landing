@@ -460,7 +460,7 @@ CREATE INDEX idx_guest_registrations_email ON guest_registrations(email);
   - Status badge: Pending (gray) / Active (green) / Expired (red) / Revoked (red)
   - Actions dropdown: Resend Email, Edit, Delete
 - [x] Resend limit: Max 2 resends per 24 hours per invite
-- [ ] Dashboard widget: "Invites Created" count
+- [x] Dashboard widget: "Invites Created" count
 - [x] Empty state: "No invites yet. Create your first invite to get started."
 
 **Email Template:**
