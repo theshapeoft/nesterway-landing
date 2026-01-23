@@ -527,11 +527,11 @@ $$ LANGUAGE plpgsql;
 **User Story:** As a host, I want invites to automatically update status based on dates, so I don't manually manage access windows.
 
 **Acceptance Criteria:**
-- [ ] Scheduled job runs daily (or on page load):
+- [x] Scheduled job runs daily (or on page load):
   - Pending → Active: When current_date >= (check_in - lead_time)
   - Active → Expired: When current_date > (check_out + post_checkout)
 - [x] Real-time validation on guest page access
-- [ ] Expired invites show distinct styling in list (strikethrough, red badge)
+- [x] Expired invites show distinct styling in list (strikethrough, red badge)
 - [ ] Optional: Email guest 1 day before expiry (future enhancement)
 
 **Technical Notes:**

@@ -235,6 +235,40 @@ export async function createInvite(
   return { success: true, invite: transformDbInvite(invite) };
 }
 
+// Calculate the expected status based on dates
+function calculateExpectedStatus(invite: DbGuestInvite): GuestInviteStatus {
+  // Don't change revoked status - it's manually set by host
+  if (invite.status === "revoked") {
+    return "revoked";
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to start of day
+
+  const checkIn = new Date(invite.check_in_date);
+  const checkOut = new Date(invite.check_out_date);
+
+  // Calculate access window
+  const accessStart = new Date(checkIn);
+  accessStart.setDate(accessStart.getDate() - invite.lead_time_days);
+
+  const accessEnd = new Date(checkOut);
+  accessEnd.setDate(accessEnd.getDate() + invite.post_checkout_days);
+
+  // Check if expired (current date > access end)
+  if (today > accessEnd) {
+    return "expired";
+  }
+
+  // Check if active (current date >= access start)
+  if (today >= accessStart) {
+    return "active";
+  }
+
+  // Otherwise pending
+  return "pending";
+}
+
 export async function getInvites(): Promise<InviteWithProperty[]> {
   const supabase = await createClient();
 
@@ -274,14 +308,46 @@ export async function getInvites(): Promise<InviteWithProperty[]> {
   // Map property info to invites
   const propertyMap = new Map(properties.map((p) => [p.id, p]));
 
-  return (invites || []).map((invite) => ({
-    ...invite,
-    property: propertyMap.get(invite.property_id) || {
-      id: invite.property_id,
-      name: "Unknown Property",
-      slug: "",
-    },
-  }));
+  // Auto-update invite statuses based on dates (on page load)
+  const invitesToUpdate: { id: string; newStatus: GuestInviteStatus }[] = [];
+
+  const processedInvites = (invites || []).map((invite) => {
+    const expectedStatus = calculateExpectedStatus(invite);
+
+    // Track invites that need status update
+    if (invite.status !== expectedStatus && invite.status !== "revoked") {
+      invitesToUpdate.push({ id: invite.id, newStatus: expectedStatus });
+    }
+
+    return {
+      ...invite,
+      // Return the expected status for immediate UI update
+      status: invite.status === "revoked" ? "revoked" : expectedStatus,
+      property: propertyMap.get(invite.property_id) || {
+        id: invite.property_id,
+        name: "Unknown Property",
+        slug: "",
+      },
+    };
+  });
+
+  // Batch update statuses in database (fire and forget for performance)
+  if (invitesToUpdate.length > 0) {
+    // Update each invite's status
+    for (const { id, newStatus } of invitesToUpdate) {
+      supabase
+        .from("guest_invites")
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .then(({ error: updateError }) => {
+          if (updateError) {
+            console.error(`Error updating invite ${id} status:`, updateError);
+          }
+        });
+    }
+  }
+
+  return processedInvites;
 }
 
 export async function resendInviteEmail(

@@ -359,3 +359,38 @@
 - ESLint passes for new/modified files
 - TypeScript passes (npx tsc --noEmit)
 - Feature 3.6.3 is now fully complete
+
+---
+
+## 2026-01-23: Implemented Invite Status Automation on Page Load (Feature 3.6.4)
+
+### What was done:
+1. Added `calculateExpectedStatus()` function to invites.ts:
+   - Calculates expected status based on check-in/out dates and lead/post-checkout days
+   - Logic: Pending → Active when current_date >= (check_in - lead_time)
+   - Logic: Active → Expired when current_date > (check_out + post_checkout)
+   - Preserves "revoked" status (manually set by host)
+
+2. Updated `getInvites()` function:
+   - Now auto-updates invite statuses on page load (MVP approach)
+   - Returns expected status for immediate UI update
+   - Batch updates database in background (fire and forget for performance)
+   - Tracks which invites need status updates to minimize DB calls
+
+3. Confirmed existing styling for expired invites:
+   - Opacity 60% applied to expired/revoked invite cards
+   - Strikethrough applied to guest name
+   - Red badge for expired/revoked statuses
+   - (Already implemented in InviteList.tsx)
+
+### Files modified:
+- src/lib/actions/invites.ts (added calculateExpectedStatus, updated getInvites)
+- PRD.md (marked 3.6.4 acceptance criteria as complete)
+
+### Notes:
+- Build passes (npm run build succeeds)
+- ESLint passes for modified files
+- TypeScript passes (npx tsc --noEmit)
+- No test script exists in this project
+- Used "status check on page load" approach as noted in PRD as acceptable for MVP
+- Feature 3.6.4 core functionality is complete (expiry email notification marked as future enhancement)
