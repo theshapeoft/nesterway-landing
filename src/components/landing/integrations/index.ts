@@ -1,0 +1,1 @@
+export { IntegrationCarousel } from './IntegrationCarousel';
