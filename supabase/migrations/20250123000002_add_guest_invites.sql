@@ -69,7 +69,7 @@ ON public.guest_invites
 FOR SELECT
 USING (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
 
@@ -79,7 +79,7 @@ ON public.guest_invites
 FOR INSERT
 WITH CHECK (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
 
@@ -89,7 +89,7 @@ ON public.guest_invites
 FOR UPDATE
 USING (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
 
@@ -99,7 +99,7 @@ ON public.guest_invites
 FOR DELETE
 USING (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
 

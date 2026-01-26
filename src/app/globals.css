@@ -223,6 +223,15 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
 body {
   font-family: var(--font-sans);
   min-height: 100dvh;
@@ -284,6 +293,17 @@ body {
 
 .animate-toast-out {
   animation: toast-out 300ms ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--ocean-600), var(--coral-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Focus styles for accessibility */

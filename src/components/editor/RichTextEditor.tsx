@@ -11,7 +11,7 @@ import {
   ListNumbers,
 } from "@phosphor-icons/react";
 import { useEffect, useRef } from "react";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 
 interface RichTextEditorProps {
   content: string;
@@ -109,6 +109,7 @@ export function RichTextEditor({
   const lastContent = useRef(content);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         // Disable features we don't need

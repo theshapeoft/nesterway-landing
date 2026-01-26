@@ -39,7 +39,7 @@ ON public.guest_registrations
 FOR SELECT
 USING (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
 
@@ -55,6 +55,6 @@ ON public.guest_registrations
 FOR DELETE
 USING (
   property_id IN (
-    SELECT id FROM public.properties WHERE user_id = auth.uid()
+    SELECT id FROM public.properties WHERE host_id = auth.uid()
   )
 );
