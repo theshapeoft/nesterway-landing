@@ -14,6 +14,7 @@ import {
   isGuestRegistered,
   getStoredAccessCode,
   InteractiveMapTab,
+  ReferralPrompt,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property, MapCategory, MapPin } from "@/types";
@@ -237,6 +238,9 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
       <div id="property-sections">
         <PropertySections sections={property.sections} />
       </div>
+
+      {/* Referral Prompt */}
+      <ReferralPrompt />
 
       {/* Bottom Navigation */}
       <BottomNavigation

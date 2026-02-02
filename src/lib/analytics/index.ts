@@ -31,6 +31,10 @@ export type AnalyticsEvent =
   // Area/explore page events
   | { name: "area_share_clicked"; data: { area: string; country: string } }
   | { name: "area_shared"; data: { area: string; method: "native" | "clipboard" } }
+  // Referral prompt events
+  | { name: "referral_prompt_clicked"; data: Record<string, never> }
+  | { name: "referral_shared"; data: { method: "native" | "clipboard" } }
+  | { name: "referral_link_clicked"; data: Record<string, never> }
   // Guest registration events
   | { name: "guest_registration_viewed"; data: { property_id: string; property_slug: string } }
   | { name: "guest_registered"; data: { property_id: string; property_slug: string; additional_guests: number } }

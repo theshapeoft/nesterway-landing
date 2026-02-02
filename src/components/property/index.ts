@@ -9,3 +9,4 @@ export { OfflineIndicator, OfflineBadge } from "./OfflineIndicator";
 export { AccessRestricted, getStoredAccessCode } from "./AccessRestricted";
 export { GuestRegistrationGate, isGuestRegistered } from "./GuestRegistrationGate";
 export { InteractiveMapTab } from "./InteractiveMapTab";
+export { ReferralPrompt } from "./ReferralPrompt";
