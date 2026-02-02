@@ -18,6 +18,7 @@ import {
   WeatherWidget,
   WhatsAppButton,
   InstallPrompt,
+  FeedbackPrompt,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property, MapCategory, MapPin } from "@/types";
@@ -265,6 +266,14 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
 
       {/* Install Prompt (PWA) */}
       <InstallPrompt propertyName={property.name} className="mt-6" />
+
+      {/* Feedback Prompt (near checkout) */}
+      <FeedbackPrompt
+        propertyId={property.id}
+        propertyName={property.name}
+        checkoutTime={property.checkoutTime}
+        className="mt-6"
+      />
 
       {/* Referral Prompt */}
       <ReferralPrompt />

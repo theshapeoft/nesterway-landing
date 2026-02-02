@@ -33,8 +33,10 @@ export type AnalyticsEvent =
   | { name: "area_shared"; data: { area: string; method: "native" | "clipboard" } }
   // Referral prompt events
   | { name: "referral_prompt_clicked"; data: Record<string, never> }
-  | { name: "referral_shared"; data: { method: "native" | "clipboard" } }
+  | { name: "referral_shared"; data: { method: "native" | "clipboard"; property_id?: string } }
   | { name: "referral_link_clicked"; data: Record<string, never> }
+  // Feedback events
+  | { name: "feedback_submitted"; data: { property_id: string; feedback: "positive" | "negative" } }
   // Guest registration events
   | { name: "guest_registration_viewed"; data: { property_id: string; property_slug: string } }
   | { name: "guest_registered"; data: { property_id: string; property_slug: string; additional_guests: number } }
