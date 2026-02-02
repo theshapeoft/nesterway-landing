@@ -16,6 +16,7 @@ import {
   InteractiveMapTab,
   ReferralPrompt,
   WeatherWidget,
+  WhatsAppButton,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property, MapCategory, MapPin } from "@/types";
@@ -234,6 +235,17 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
         exploreHref={`/${property.countrySlug}/${property.areaSlug}`}
         areaName={property.areaName}
       />
+
+      {/* WhatsApp Contact Button */}
+      {property.hostWhatsapp && (
+        <div className="mx-auto max-w-lg px-4 pt-4">
+          <WhatsAppButton
+            phoneNumber={property.hostWhatsapp}
+            propertyName={property.name}
+            hostName={property.hostName}
+          />
+        </div>
+      )}
 
       {/* Weather Widget */}
       {property.latitude && property.longitude && (

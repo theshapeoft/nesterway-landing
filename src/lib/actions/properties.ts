@@ -27,6 +27,7 @@ export interface DbProperty {
   status: "draft" | "published" | "archived";
   access_mode: "public" | "invite_only";
   require_guest_registration: boolean;
+  host_whatsapp: string | null;
   is_deleted: boolean;
   deleted_at: string | null;
   created_at: string;
@@ -253,6 +254,7 @@ export async function updateProperty(id: string, formData: FormData) {
   const name = formData.get("name") as string | null;
   const welcomeMessage = formData.get("welcome_message") as string | null;
   const hostDisplayName = formData.get("host_display_name") as string | null;
+  const hostWhatsapp = formData.get("host_whatsapp") as string | null;
   const hostPhotoUrl = formData.get("host_photo_url") as string | null;
   const heroImageUrl = formData.get("hero_image_url") as string | null;
   const checkoutTime = formData.get("checkout_time") as string | null;
@@ -262,6 +264,7 @@ export async function updateProperty(id: string, formData: FormData) {
   if (name !== null) updates.name = name.trim();
   if (welcomeMessage !== null) updates.welcome_message = welcomeMessage.trim() || null;
   if (hostDisplayName !== null) updates.host_display_name = hostDisplayName.trim() || null;
+  if (hostWhatsapp !== null) updates.host_whatsapp = hostWhatsapp.trim() || null;
   if (hostPhotoUrl !== null) updates.host_photo_url = hostPhotoUrl.trim() || null;
   if (heroImageUrl !== null) updates.hero_image_url = heroImageUrl.trim() || null;
   if (checkoutTime !== null) updates.checkout_time = checkoutTime;
@@ -392,6 +395,7 @@ export async function duplicateProperty(id: string) {
       place_id: original.place_id,
       welcome_message: original.welcome_message,
       host_display_name: original.host_display_name,
+      host_whatsapp: original.host_whatsapp,
       host_photo_url: original.host_photo_url,
       hero_image_url: original.hero_image_url,
       checkout_time: original.checkout_time,

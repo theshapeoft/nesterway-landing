@@ -11,3 +11,4 @@ export { GuestRegistrationGate, isGuestRegistered } from "./GuestRegistrationGat
 export { InteractiveMapTab } from "./InteractiveMapTab";
 export { ReferralPrompt } from "./ReferralPrompt";
 export { WeatherWidget } from "./WeatherWidget";
+export { WhatsAppButton } from "./WhatsAppButton";

@@ -156,6 +156,17 @@ export function BasicInfoTab({ property, onSave }: BasicInfoTabProps) {
             hint="A friendly photo helps guests feel welcome"
           />
         </div>
+
+        <div className="mt-4">
+          <FormField
+            label="WhatsApp Number"
+            name="host_whatsapp"
+            type="tel"
+            defaultValue={property.host_whatsapp || ""}
+            placeholder="+1 555 123 4567"
+            hint="Include country code. Guests can tap to message you directly."
+          />
+        </div>
       </div>
 
       <div className="border-t pt-6">

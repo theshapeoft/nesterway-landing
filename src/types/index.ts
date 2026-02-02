@@ -63,6 +63,7 @@ export interface Property {
   checkoutTime: string;
   accessMode: PropertyAccessMode;
   requireGuestRegistration: boolean;
+  hostWhatsapp?: string;
   activeMapId?: string;
   wifi: {
     networks: WiFiNetwork[];
