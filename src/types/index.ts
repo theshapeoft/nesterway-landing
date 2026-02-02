@@ -54,6 +54,10 @@ export interface Property {
   countryName: string;
   welcomeMessage?: string;
   hostName?: string;
+  // Location data for weather and maps
+  latitude?: number;
+  longitude?: number;
+  city?: string;
   hostPhotoUrl?: string;
   heroImageUrl?: string;
   checkoutTime: string;

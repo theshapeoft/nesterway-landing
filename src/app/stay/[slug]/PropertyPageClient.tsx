@@ -15,6 +15,7 @@ import {
   getStoredAccessCode,
   InteractiveMapTab,
   ReferralPrompt,
+  WeatherWidget,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property, MapCategory, MapPin } from "@/types";
@@ -233,6 +234,16 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
         exploreHref={`/${property.countrySlug}/${property.areaSlug}`}
         areaName={property.areaName}
       />
+
+      {/* Weather Widget */}
+      {property.latitude && property.longitude && (
+        <WeatherWidget
+          latitude={property.latitude}
+          longitude={property.longitude}
+          locationName={property.city || property.areaName}
+          className="mt-6"
+        />
+      )}
 
       {/* Property Sections */}
       <div id="property-sections">

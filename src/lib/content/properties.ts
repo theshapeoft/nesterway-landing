@@ -66,6 +66,10 @@ export async function getProperty(slug: string): Promise<Property | null> {
     accessMode: (dbProperty.access_mode || "public") as PropertyAccessMode,
     requireGuestRegistration: dbProperty.require_guest_registration || false,
     activeMapId: dbProperty.active_map_id || undefined,
+    // Location data for weather widget
+    latitude: dbProperty.latitude ? parseFloat(dbProperty.latitude) : undefined,
+    longitude: dbProperty.longitude ? parseFloat(dbProperty.longitude) : undefined,
+    city: dbProperty.city || undefined,
     wifi: {
       networks: (wifiNetworks || []).map((n): WiFiNetwork => ({
         name: n.name,

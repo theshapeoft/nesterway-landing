@@ -10,3 +10,4 @@ export { AccessRestricted, getStoredAccessCode } from "./AccessRestricted";
 export { GuestRegistrationGate, isGuestRegistered } from "./GuestRegistrationGate";
 export { InteractiveMapTab } from "./InteractiveMapTab";
 export { ReferralPrompt } from "./ReferralPrompt";
+export { WeatherWidget } from "./WeatherWidget";
