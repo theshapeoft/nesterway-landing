@@ -28,6 +28,9 @@ export type AnalyticsEvent =
   | { name: "qr_scan"; data: { property_id: string; slug: string } }
   | { name: "property_viewed"; data: { property_id: string; slug: string } }
   | { name: "wifi_copied"; data: { property_id: string } }
+  // Area/explore page events
+  | { name: "area_share_clicked"; data: { area: string; country: string } }
+  | { name: "area_shared"; data: { area: string; method: "native" | "clipboard" } }
   // Guest registration events
   | { name: "guest_registration_viewed"; data: { property_id: string; property_slug: string } }
   | { name: "guest_registered"; data: { property_id: string; property_slug: string; additional_guests: number } }

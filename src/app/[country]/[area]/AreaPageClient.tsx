@@ -31,6 +31,7 @@ export function AreaPageClient({ area }: AreaPageClientProps) {
         tagline={area.tagline}
         countrySlug={area.countrySlug}
         countryName={area.countryName}
+        areaSlug={area.slug}
         heroImageUrl={area.heroImageUrl}
       />
 
