@@ -17,6 +17,7 @@ import {
   ReferralPrompt,
   WeatherWidget,
   WhatsAppButton,
+  InstallPrompt,
 } from "@/components/property";
 import { Toast, useToast } from "@/components/ui";
 import type { Property, MapCategory, MapPin } from "@/types";
@@ -261,6 +262,9 @@ export function PropertyPageClient({ property }: PropertyPageClientProps) {
       <div id="property-sections">
         <PropertySections sections={property.sections} />
       </div>
+
+      {/* Install Prompt (PWA) */}
+      <InstallPrompt propertyName={property.name} className="mt-6" />
 
       {/* Referral Prompt */}
       <ReferralPrompt />
