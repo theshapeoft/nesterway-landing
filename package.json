@@ -1,8 +1,8 @@
 {
-  "name": "travelama-landing",
+  "name": "nesterway-landing",
   "version": "1.0.0",
   "private": true,
-  "description": "TouchStay-inspired landing page for Travelama",
+  "description": "TouchStay-inspired landing page for Nesterway",
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
     "build": "next build --turbopack",

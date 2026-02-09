@@ -1,14 +1,14 @@
 # Comprehensive Market Research Report: Digital Property Guide & Vacation Rental Guest Communication Solutions
 
 **Report Date:** 2026-01-23
-**Prepared For:** Travelama
+**Prepared For:** Nesterway
 **Purpose:** Competitive positioning and market opportunity analysis
 
 ---
 
 ## Executive Summary
 
-This report provides an in-depth analysis of the digital property guide and vacation rental guest communication market to inform Travelama's competitive positioning strategy. Based on research of 15+ direct and adjacent competitors, market trends, and host pain points, the report identifies clear opportunities for differentiation in an increasingly crowded but rapidly growing market.
+This report provides an in-depth analysis of the digital property guide and vacation rental guest communication market to inform Nesterway's competitive positioning strategy. Based on research of 15+ direct and adjacent competitors, market trends, and host pain points, the report identifies clear opportunities for differentiation in an increasingly crowded but rapidly growing market.
 
 **Key Findings:**
 - Market projected to grow from $516M (2026) to $1.83B (2035) at 17.16% CAGR
@@ -872,7 +872,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 
 ---
 
-## 5. Positioning Opportunities for Travelama
+## 5. Positioning Opportunities for Nesterway
 
 ### 5.1 Recommended Positioning
 
@@ -947,7 +947,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 **Free Tier:**
 - 2 properties maximum
 - Core features (WiFi, rules, emergency, basic customization)
-- Travelama branding on guidebook
+- Nesterway branding on guidebook
 - QR code access
 - Basic templates
 - Mobile-responsive
@@ -955,7 +955,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 
 **Premium Tier - $19/month (annual) / $24/month (monthly):**
 - Unlimited properties
-- Remove Travelama branding
+- Remove Nesterway branding
 - Advanced customization (colors, fonts, logo)
 - Rich text editor
 - Analytics (views, section engagement)
@@ -1068,16 +1068,16 @@ This report provides an in-depth analysis of the digital property guide and vaca
 ### 5.6 Key Differentiators (Elevator Pitch Components)
 
 **For Solo Hosts:**
-> "Travelama is the beautiful, simple digital guidebook that takes 5 minutes to set up and makes your guests say 'wow.' Free for your first 2 properties, with stunning designs that competitors charge $100+/month for."
+> "Nesterway is the beautiful, simple digital guidebook that takes 5 minutes to set up and makes your guests say 'wow.' Free for your first 2 properties, with stunning designs that competitors charge $100+/month for."
 
 **For Design-Conscious Hosts:**
-> "Create digital guidebooks your guests will actually love to use. While other platforms look like spreadsheets, Travelama looks like your favorite apps—modern, clean, delightful."
+> "Create digital guidebooks your guests will actually love to use. While other platforms look like spreadsheets, Nesterway looks like your favorite apps—modern, clean, delightful."
 
 **For New Hosts:**
 > "Launch your first digital guidebook free in 5 minutes. No complex setup, no PMS required, no learning curve. Just share a QR code and give guests everything they need."
 
 **For Eco-Conscious Hosts:**
-> "Show guests your sustainability story. Travelama helps you highlight eco-features, share green initiatives, and connect with environmentally conscious travelers—features no other platform offers."
+> "Show guests your sustainability story. Nesterway helps you highlight eco-features, share green initiatives, and connect with environmentally conscious travelers—features no other platform offers."
 
 **Universal Value Props:**
 1. **Beautiful Design** (vs ugly/generic competitors)
@@ -1090,7 +1090,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 
 ## 6. Competitive Positioning Matrix
 
-| Competitor | Price Range | Target Market | Strength | Weakness | Travelama Advantage |
+| Competitor | Price Range | Target Market | Strength | Weakness | Nesterway Advantage |
 |------------|-------------|---------------|----------|----------|---------------------|
 | **TouchStay** | $12-120/mo | Small-mid hosts | AI features, established | Limited integrations, learning curve | Simpler, better design, cheaper |
 | **Hostfully** | $8-500/mo | Small-mid hosts | User-friendly, free tier | Expensive multi-property, rigid | Better pricing for 3+ properties |
@@ -1112,7 +1112,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 1. **Finalize free tier** (2 properties, core features, branded)
 2. **Polish design system** (ensure best-in-class visual design)
 3. **Launch Product Hunt** ("Beautiful digital guidebooks for Airbnb hosts")
-4. **Create comparison page** ("Travelama vs TouchStay vs Hostfully")
+4. **Create comparison page** ("Nesterway vs TouchStay vs Hostfully")
 5. **Build SEO content** ("How to create a digital guidebook 2026")
 
 ### Short-term (Months 2-3):
@@ -1187,7 +1187,7 @@ This report provides an in-depth analysis of the digital property guide and vaca
 
 ## Conclusion
 
-The digital guidebook market presents a significant opportunity for Travelama to establish a differentiated position. While the market is growing rapidly (17.16% CAGR) and becoming increasingly crowded, clear gaps exist:
+The digital guidebook market presents a significant opportunity for Nesterway to establish a differentiated position. While the market is growing rapidly (17.16% CAGR) and becoming increasingly crowded, clear gaps exist:
 
 1. **Design-first platforms** (most competitors are feature-first)
 2. **Freemium with quality** (free is basic, premium is expensive)
@@ -1211,7 +1211,7 @@ Free (2 properties) → Premium ($19/month unlimited) → Pro ($49/month for 20+
 4. Experience-focused (vs operations-focused)
 5. Sustainability features (unique)
 
-The market is large enough ($516M in 2026) and growing fast enough (17.16% CAGR) to support multiple players. By focusing on underserved segments (design-conscious, experience-focused, eco-conscious hosts) and clear differentiation (design, simplicity, values), Travelama can capture meaningful market share without directly competing with enterprise PMS solutions.
+The market is large enough ($516M in 2026) and growing fast enough (17.16% CAGR) to support multiple players. By focusing on underserved segments (design-conscious, experience-focused, eco-conscious hosts) and clear differentiation (design, simplicity, values), Nesterway can capture meaningful market share without directly competing with enterprise PMS solutions.
 
 ---
 

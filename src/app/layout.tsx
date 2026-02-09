@@ -13,24 +13,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Travelama — Digital Property Guides That Delight Your Guests",
+  title: "Nesterway — Coming Soon",
   description:
-    "94% of hosts save 5+ hours per booking with instant WiFi access, house rules, and local recommendations. Start free for 1 property.",
+    "Digital property guides that delight your guests. Nesterway is launching soon.",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "Travelama — Digital Property Guides That Delight Your Guests",
+    title: "Nesterway — Coming Soon",
     description:
-      "94% of hosts save 5+ hours per booking with instant WiFi access, house rules, and local recommendations.",
+      "Digital property guides that delight your guests. Nesterway is launching soon.",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Travelama — Digital Property Guides That Delight Your Guests",
-    description:
-      "94% of hosts save 5+ hours per booking with instant WiFi access, house rules, and local recommendations.",
   },
 };
 
@@ -38,7 +41,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0E7490",
+  themeColor: "#011427",
 };
 
 export default function RootLayout({

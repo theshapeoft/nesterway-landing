@@ -40,10 +40,10 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { label: "Twitter", href: "https://twitter.com/travelama", icon: "twitter" },
-  { label: "Facebook", href: "https://facebook.com/travelama", icon: "facebook" },
-  { label: "Instagram", href: "https://instagram.com/travelama", icon: "instagram" },
-  { label: "LinkedIn", href: "https://linkedin.com/company/travelama", icon: "linkedin" }
+  { label: "Twitter", href: "#", icon: "twitter" },
+  { label: "Facebook", href: "#", icon: "facebook" },
+  { label: "Instagram", href: "#", icon: "instagram" },
+  { label: "LinkedIn", href: "#", icon: "linkedin" }
 ];
 
 export function LandingFooter() {
@@ -57,7 +57,7 @@ export function LandingFooter() {
           {/* Brand Column */}
           <div className="col-span-2">
             <div className="text-2xl font-bold text-white mb-4">
-              Travelama
+              Nesterway
             </div>
             <p className="text-sm mb-6 max-w-xs">
               Digital property guides that delight your guests and save you time.
@@ -134,7 +134,7 @@ export function LandingFooter() {
         <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <div>
-              © {currentYear} Travelama. All rights reserved.
+              © {currentYear} Nesterway. All rights reserved.
             </div>
             <div className="flex items-center gap-6">
               <span>Made with ❤️ for hosts</span>

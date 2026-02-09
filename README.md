@@ -1,6 +1,6 @@
-# Travelama Landing Page
+# Nesterway Landing Page
 
-TouchStay-inspired marketing landing page for Travelama. A comprehensive, production-ready landing page with full interactivity, animations, and Travelama-specific content.
+TouchStay-inspired marketing landing page for Nesterway. A comprehensive, production-ready landing page with full interactivity, animations, and Nesterway-specific content.
 
 ## 🚀 Quick Start
 
@@ -139,7 +139,7 @@ Target Lighthouse scores:
 
 ## 📚 Documentation
 
-See `/Users/tyrelsmythe/travelama/LANDING_PAGE_IMPLEMENTATION.md` for full implementation details.
+See `/Users/tyrelsmythe/nesterway/LANDING_PAGE_IMPLEMENTATION.md` for full implementation details.
 
 ---
 

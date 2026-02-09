@@ -132,7 +132,7 @@ export const landingContent = {
 
   cta: {
     title: "Ready to Delight Your Guests?",
-    subtitle: "Join thousands of hosts who have already saved hours with Travelama",
+    subtitle: "Join thousands of hosts who have already saved hours with Nesterway",
     primaryButton: "Start Free Trial",
     secondaryButton: "Schedule Demo"
   }

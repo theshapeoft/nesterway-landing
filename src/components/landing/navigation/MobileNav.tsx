@@ -39,7 +39,7 @@ export function MobileNav({ isOpen, onClose, navigationItems }: MobileNavProps) 
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
             <div className="text-2xl font-bold text-ocean-600">
-              Travelama
+              Nesterway
             </div>
             <button
               onClick={onClose}

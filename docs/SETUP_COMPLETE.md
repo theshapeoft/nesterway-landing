@@ -1,6 +1,6 @@
 # ✅ Landing Page Setup Complete
 
-Your TouchStay-inspired landing page is now fully set up in this folder (`/Users/tyrelsmythe/travelama-landing`).
+Your TouchStay-inspired landing page is now fully set up in this folder (`/Users/tyrelsmythe/nesterway-landing`).
 
 ## 🎯 What You Have
 
@@ -10,13 +10,13 @@ A complete, production-ready Next.js landing page with:
 - **Full Interactivity**: Auto-rotating carousels, pricing calculator, dropdown menus
 - **Mobile Responsive**: Works perfectly on all devices (375px to 1920px+)
 - **Animations**: Scroll-triggered fade-ins, hover effects
-- **Travelama Branding**: All content is Travelama-specific (Ocean/Sand/Coral colors)
+- **Nesterway Branding**: All content is Nesterway-specific (Ocean/Sand/Coral colors)
 
 ## 🚀 Start Using It Now
 
 ```bash
 # 1. Make sure you're in the landing folder
-cd /Users/tyrelsmythe/travelama-landing
+cd /Users/tyrelsmythe/nesterway-landing
 
 # 2. Install dependencies (if not done)
 npm install
@@ -30,10 +30,10 @@ npm run dev
 
 ## 📂 This is a Separate Project
 
-**Important**: This folder (`travelama-landing`) is SEPARATE from your main app (`/Users/tyrelsmythe/travelama`).
+**Important**: This folder (`nesterway-landing`) is SEPARATE from your main app (`/Users/tyrelsmythe/nesterway`).
 
 - **Landing Page** (this folder): Runs on port **3001**
-- **Main App** (`/travelama`): Runs on port **3000**
+- **Main App** (`/nesterway`): Runs on port **3000**
 
 They don't conflict with each other!
 
@@ -145,8 +145,8 @@ vercel
 ## 📚 Need Help?
 
 - **README.md**: General documentation
-- **LANDING_PAGE_IMPLEMENTATION.md** (in `/travelama`): Full implementation details
-- **LANDING_PAGE_QUICKSTART.md** (in `/travelama`): Quick start guide
+- **LANDING_PAGE_IMPLEMENTATION.md** (in `/nesterway`): Full implementation details
+- **LANDING_PAGE_QUICKSTART.md** (in `/nesterway`): Quick start guide
 
 ## 🎉 You're All Set!
 

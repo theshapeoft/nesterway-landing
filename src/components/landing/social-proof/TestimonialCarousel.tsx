@@ -61,7 +61,7 @@ export function TestimonialCarousel() {
       <SectionHeader
         subtitle="Testimonials"
         title="Loved by Hosts Worldwide"
-        description="See what hosts are saying about how Travelama transformed their guest experience"
+        description="See what hosts are saying about how Nesterway transformed their guest experience"
       />
 
       <div className="relative">

@@ -61,7 +61,7 @@ export function LandingNav() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="text-2xl font-bold text-ocean-600">
-                Travelama
+                Nesterway
               </div>
             </Link>
 

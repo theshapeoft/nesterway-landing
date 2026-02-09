@@ -1,15 +1,15 @@
 ---
-description: Instructions for AI coding agents working on Travelama Landing Page
+description: Instructions for AI coding agents working on Nesterway Landing Page
 globs:
   - "**/*"
 alwaysApply: true
 ---
 
-# Travelama Landing Page - Marketing Site
+# Nesterway Landing Page - Marketing Site
 
-TouchStay-inspired marketing landing page for Travelama. A comprehensive, production-ready landing page with full interactivity, animations, and Travelama-specific content.
+TouchStay-inspired marketing landing page for Nesterway. A comprehensive, production-ready landing page with full interactivity, animations, and Nesterway-specific content.
 
-**What is Travelama?** A digital property guide platform for vacation rental hosts. Guests scan QR codes to instantly access WiFi passwords, house rules, local recommendations, and emergency contacts - no app downloads required.
+**What is Nesterway?** A digital property guide platform for vacation rental hosts. Guests scan QR codes to instantly access WiFi passwords, house rules, local recommendations, and emergency contacts - no app downloads required.
 
 ## Quick Start Commands
 
@@ -29,7 +29,7 @@ npm run type-check         # TypeScript validation (no emit)
 
 **Port Configuration:**
 - Landing page: `3001` (this project)
-- Main app: `3000` (separate project at `/Users/tyrelsmythe/travelama`)
+- Main app: `3000` (separate project at `/Users/tyrelsmythe/nesterway`)
 
 ## Tech Stack (Exact Versions)
 
@@ -618,7 +618,7 @@ const { ref, isInView } = useInView(0.2) // Change 0.1 to 0.2
 
 ## Port Management
 
-This project uses port 3001 to avoid conflicts with the main Travelama app (port 3000).
+This project uses port 3001 to avoid conflicts with the main Nesterway app (port 3000).
 
 To change port:
 ```json
@@ -694,8 +694,8 @@ Target Lighthouse scores:
 
 ## Resources
 
-- **Main app**: `/Users/tyrelsmythe/travelama` (separate Next.js project on port 3000)
-- **Landing page implementation docs**: `/Users/tyrelsmythe/travelama/LANDING_PAGE_IMPLEMENTATION.md`
+- **Main app**: `/Users/tyrelsmythe/nesterway` (separate Next.js project on port 3000)
+- **Landing page implementation docs**: `/Users/tyrelsmythe/nesterway/LANDING_PAGE_IMPLEMENTATION.md`
 - **Market research**: `MARKET_RESEARCH_REPORT.md` (in this repo)
 - **Setup notes**: `SETUP_COMPLETE.md` (in this repo)
 

@@ -20,7 +20,7 @@ npm run type-check         # TypeScript validation
 
 ## Project Overview
 
-Travelama Landing Page is a TouchStay-inspired marketing site for Travelama, a digital property guide platform for vacation rental hosts. Guests scan QR codes to access WiFi passwords, house rules, local recommendations, and emergency contacts - no apps required.
+Nesterway Landing Page is a TouchStay-inspired marketing site for Nesterway, a digital property guide platform for vacation rental hosts. Guests scan QR codes to access WiFi passwords, house rules, local recommendations, and emergency contacts - no apps required.
 
 **Core Sections:**
 - Hero with animated background and dual CTAs

@@ -11,7 +11,7 @@ export interface Testimonial {
 export const testimonials: Testimonial[] = [
   {
     id: "testimonial-1",
-    quote: "We went from 10+ WiFi questions per guest to zero. Travelama paid for itself in saved time within the first week.",
+    quote: "We went from 10+ WiFi questions per guest to zero. Nesterway paid for itself in saved time within the first week.",
     author: "Sarah Mitchell",
     role: "Coastal Retreat",
     propertyCount: 5,
@@ -65,7 +65,7 @@ export const testimonials: Testimonial[] = [
 
 export const featuredTestimonial: Testimonial = {
   id: "featured-1",
-  quote: "Travelama transformed how we welcome guests. What used to take 30 minutes of back-and-forth messages now happens instantly with a QR code scan. Our review scores went up, our workload went down, and guests love the professional touch. Best investment we've made in our hosting business.",
+  quote: "Nesterway transformed how we welcome guests. What used to take 30 minutes of back-and-forth messages now happens instantly with a QR code scan. Our review scores went up, our workload went down, and guests love the professional touch. Best investment we've made in our hosting business.",
   author: "Jennifer Martinez",
   role: "Lake House Retreats - 7 Properties",
   rating: 5,
