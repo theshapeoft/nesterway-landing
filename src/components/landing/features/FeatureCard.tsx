@@ -10,9 +10,10 @@ import {
   PlusCircle,
   Smartphone,
   LayoutGrid,
-  Image
+  Image,
+  RefreshCw,
+  Palette
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui";
 import { Feature } from "@/lib/data/features";
 
 const iconMap = {
@@ -27,7 +28,9 @@ const iconMap = {
   'plus-circle': PlusCircle,
   smartphone: Smartphone,
   'layout-grid': LayoutGrid,
-  image: Image
+  image: Image,
+  sync: RefreshCw,
+  palette: Palette
 };
 
 interface FeatureCardProps {
@@ -38,23 +41,21 @@ export function FeatureCard({ feature }: FeatureCardProps) {
   const Icon = iconMap[feature.icon as keyof typeof iconMap] || QrCode;
 
   return (
-    <Card className="group border-none shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-      <CardContent className="p-6">
-        {/* Icon */}
-        <div className="w-12 h-12 rounded-lg bg-ocean-100 text-ocean-600 flex items-center justify-center mb-4 group-hover:bg-ocean-600 group-hover:text-white transition-colors">
-          <Icon className="w-6 h-6" />
-        </div>
+    <div className="group p-8 rounded-2xl bg-sand-50 hover:bg-sand-100 transition-all duration-300 hover:-translate-y-1">
+      {/* Icon */}
+      <div className="w-14 h-14 rounded-xl bg-ocean-500/10 text-ocean-600 flex items-center justify-center mb-6 group-hover:bg-ocean-600 group-hover:text-white transition-colors duration-300">
+        <Icon className="w-7 h-7" />
+      </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          {feature.title}
-        </h3>
+      {/* Title */}
+      <h3 className="text-xl font-semibold text-neutral-900 mb-3">
+        {feature.title}
+      </h3>
 
-        {/* Description */}
-        <p className="text-muted-foreground">
-          {feature.description}
-        </p>
-      </CardContent>
-    </Card>
+      {/* Description */}
+      <p className="text-neutral-600 leading-relaxed">
+        {feature.description}
+      </p>
+    </div>
   );
 }
