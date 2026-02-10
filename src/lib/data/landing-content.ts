@@ -1,54 +1,92 @@
 export const landingContent = {
   hero: {
-    headline: "Digital property guides that delight your guests",
-    subheadline: "94% of hosts save 5+ hours per booking with instant WiFi access, house rules, and local recommendations",
+    headline: "Every great stay begins with a great guide",
+    subheadline: "Create beautiful digital property guides that your guests will love. QR code access, offline-ready, and updated in real-time.",
     primaryCTA: {
-      text: "Start Free Trial",
+      text: "Start for free",
       href: "/signup"
     },
     secondaryCTA: {
-      text: "See Demo Property",
+      text: "See a live demo",
       href: "/stay/demo-property"
     },
-    statBadge: "94% of hosts save time"
+    statBadge: "Join 1,200+ hosts"
   },
 
   whatIs: {
-    title: "What is a Digital Property Guide?",
-    description: "A modern alternative to outdated binders and printed sheets. Your guests scan a QR code and instantly access everything they need - WiFi passwords, house rules, local recommendations, and emergency contacts. No app downloads, works offline, updates in real-time.",
+    title: "What is Nesterway?",
+    description: "A modern alternative to printed binders and unread emails. Your guests scan a QR code and instantly access everything they need — WiFi passwords, house rules, local recommendations, and emergency contacts. Updates sync in real-time. Works offline in remote areas.",
     benefits: [
       {
         title: "For Your Guests",
-        description: "Instant access to everything they need, beautifully presented on their phone"
+        description: "Scan a QR code and instantly access WiFi, house rules, and local gems. No app downloads, works offline, beautifully designed."
       },
       {
         title: "For You",
-        description: "Save hours answering the same questions. Update once, everyone sees the latest info"
+        description: "Update once, everyone sees the latest info. Stop answering the same questions. Reclaim your time and peace of mind."
       },
       {
-        title: "For Your Property",
-        description: "Professional presentation that elevates your brand and improves reviews"
+        title: "For Your Business",
+        description: "Professional presentation that elevates your brand. Better reviews, fewer complaints, guests who recommend you."
       }
     ]
   },
 
   process: {
-    title: "Get Started in Minutes",
+    title: "Live in Minutes",
+    subtitle: "No technical skills required. Most hosts are up and running in under 15 minutes.",
     steps: [
       {
         number: 1,
         title: "Create Your Guide",
-        description: "Add WiFi, rules, and recommendations in minutes using our simple templates"
+        description: "Add WiFi, house rules, and local recommendations using our intuitive editor"
       },
       {
         number: 2,
-        title: "Share QR Code",
-        description: "Print it, text it, or add to your listing - however works best for you"
+        title: "Share Your QR Code",
+        description: "Print it, add it to your listing, or text it to guests before arrival"
       },
       {
         number: 3,
         title: "Delight Your Guests",
-        description: "They get instant access, you save hours on questions and support"
+        description: "They get instant access, you get fewer questions and better reviews"
+      }
+    ]
+  },
+
+  features: {
+    title: "Everything you need",
+    subtitle: "Thoughtfully designed features that make hosting easier",
+    items: [
+      {
+        title: "QR Code Access",
+        description: "Guests scan once and have everything at their fingertips. Works on any phone.",
+        icon: "qr"
+      },
+      {
+        title: "WiFi Sharing",
+        description: "One tap to copy the password. No more guests asking for the WiFi.",
+        icon: "wifi"
+      },
+      {
+        title: "Local Recommendations",
+        description: "Share your favorite restaurants, attractions, and hidden gems.",
+        icon: "map"
+      },
+      {
+        title: "Offline Mode",
+        description: "Works without internet for remote cabins and areas with poor signal.",
+        icon: "offline"
+      },
+      {
+        title: "Real-time Updates",
+        description: "Change anything and all guests see the update immediately.",
+        icon: "sync"
+      },
+      {
+        title: "Custom Branding",
+        description: "Add your logo and colors. Make it feel like your brand.",
+        icon: "palette"
       }
     ]
   },
@@ -79,7 +117,7 @@ export const landingContent = {
     subtitle: "Start free. Scale as you grow. No hidden fees.",
     tiers: [
       {
-        name: "Solo Host",
+        name: "Free",
         properties: "1 property",
         price: 0,
         period: "forever",
@@ -93,14 +131,14 @@ export const landingContent = {
         ]
       },
       {
-        name: "Growing Portfolio",
+        name: "Pro",
         properties: "2-5 properties",
         price: 12,
         annualPrice: 10,
         period: "per property/month",
-        description: "For hosts scaling up",
+        description: "For growing portfolios",
         features: [
-          "Everything in Solo",
+          "Everything in Free",
           "Multi-property dashboard",
           "Custom branding",
           "Priority support",
@@ -109,14 +147,14 @@ export const landingContent = {
         popular: true
       },
       {
-        name: "Professional",
+        name: "Business",
         properties: "6+ properties",
         price: 10,
         annualPrice: 8,
         period: "per property/month",
         description: "For property managers",
         features: [
-          "Everything in Growing",
+          "Everything in Pro",
           "Bulk operations",
           "Team collaboration",
           "API access",
@@ -131,9 +169,14 @@ export const landingContent = {
   },
 
   cta: {
-    title: "Ready to Delight Your Guests?",
-    subtitle: "Join thousands of hosts who have already saved hours with Travelama",
-    primaryButton: "Start Free Trial",
-    secondaryButton: "Schedule Demo"
+    title: "Ready to transform your guest experience?",
+    subtitle: "Join 1,200+ hosts who've stopped answering repetitive questions and started getting better reviews.",
+    primaryButton: "Start for free",
+    secondaryButton: "See live demo"
+  },
+
+  footer: {
+    tagline: "Digital guest guides for modern hosts",
+    copyright: "Nesterway"
   }
 };

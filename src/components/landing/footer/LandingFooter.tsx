@@ -39,43 +39,36 @@ const footerLinks = {
   }
 };
 
-const socialLinks = [
-  { label: "Twitter", href: "https://twitter.com/travelama", icon: "twitter" },
-  { label: "Facebook", href: "https://facebook.com/travelama", icon: "facebook" },
-  { label: "Instagram", href: "https://instagram.com/travelama", icon: "instagram" },
-  { label: "LinkedIn", href: "https://linkedin.com/company/travelama", icon: "linkedin" }
-];
-
 export function LandingFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-sand-50 border-t border-sand-200">
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+      <div className="container mx-auto px-6 lg:px-8 py-16 md:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="col-span-2">
-            <div className="text-2xl font-bold text-white mb-4">
-              Travelama
-            </div>
-            <p className="text-sm mb-6 max-w-xs">
-              Digital property guides that delight your guests and save you time.
+            <Link href="/" className="flex items-center gap-2 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-neutral-900 flex items-center justify-center">
+                <span className="text-white font-serif text-xl font-semibold">N</span>
+              </div>
+              <span className="font-serif text-2xl font-medium text-neutral-900 tracking-tight">
+                Nesterway
+              </span>
+            </Link>
+            <p className="text-neutral-600 mb-6 max-w-xs leading-relaxed">
+              Digital guest guides for modern hosts. Beautiful, simple, and loved by guests.
             </p>
             {/* Social Links */}
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
+            <div className="flex gap-3">
+              {['X', 'IG', 'LI'].map((social, i) => (
                 <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
-                  aria-label={social.label}
+                  key={i}
+                  href="#"
+                  className="w-10 h-10 rounded-full bg-sand-200 hover:bg-ocean-500 text-neutral-600 hover:text-white flex items-center justify-center transition-colors text-sm font-medium"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gray-800 hover:bg-ocean-600 flex items-center justify-center transition-colors">
-                    {social.icon[0].toUpperCase()}
-                  </div>
+                  {social}
                 </a>
               ))}
             </div>
@@ -84,7 +77,7 @@ export function LandingFooter() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([key, section]) => (
             <div key={key}>
-              <h3 className="font-semibold text-white mb-4">
+              <h3 className="font-medium text-neutral-900 mb-4 text-sm uppercase tracking-wider">
                 {section.title}
               </h3>
               <ul className="space-y-3">
@@ -92,7 +85,7 @@ export function LandingFooter() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm hover:text-white transition-colors"
+                      className="text-neutral-600 hover:text-neutral-900 transition-colors text-[15px]"
                     >
                       {link.label}
                     </Link>
@@ -104,23 +97,25 @@ export function LandingFooter() {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="max-w-md">
-            <h3 className="font-semibold text-white mb-2">
-              Stay Updated
-            </h3>
-            <p className="text-sm mb-4">
-              Get tips, updates, and exclusive content for hosts.
-            </p>
-            <form className="flex gap-2">
+        <div className="mt-16 pt-12 border-t border-sand-200">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <h3 className="font-serif text-xl font-medium text-neutral-900 mb-2">
+                Stay in the loop
+              </h3>
+              <p className="text-neutral-600">
+                Tips, updates, and insights for hosts. No spam, ever.
+              </p>
+            </div>
+            <form className="flex gap-2 w-full md:w-auto">
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 text-white"
+                className="flex-1 md:w-64 px-4 py-3 bg-white border border-sand-300 rounded-full focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
               />
               <button
                 type="submit"
-                className="px-6 py-2 bg-ocean-600 text-white font-semibold rounded-lg hover:bg-ocean-700 transition-colors"
+                className="px-6 py-3 bg-neutral-900 text-white font-medium rounded-full hover:bg-neutral-800 transition-colors"
               >
                 Subscribe
               </button>
@@ -130,14 +125,14 @@ export function LandingFooter() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <div className="border-t border-sand-200">
+        <div className="container mx-auto px-6 lg:px-8 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-500">
             <div>
-              © {currentYear} Travelama. All rights reserved.
+              © {currentYear} Nesterway. All rights reserved.
             </div>
-            <div className="flex items-center gap-6">
-              <span>Made with ❤️ for hosts</span>
+            <div className="flex items-center gap-1">
+              Made with <span className="text-coral-500">♥</span> for hosts everywhere
             </div>
           </div>
         </div>

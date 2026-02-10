@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CTAButton } from "../shared";
 import { MobileNav } from "./MobileNav";
 import { NavDropdown } from "./NavDropdown";
 
@@ -50,23 +49,26 @@ export function LandingNav() {
     <>
       <nav
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-200',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
+            ? 'bg-sand-50/95 backdrop-blur-md shadow-sm'
             : 'bg-transparent'
         )}
       >
-        <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="text-2xl font-bold text-ocean-600">
-                Travelama
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-10 h-10 rounded-xl bg-neutral-900 flex items-center justify-center">
+                <span className="text-white font-serif text-xl font-semibold">N</span>
               </div>
+              <span className="font-serif text-2xl font-medium text-neutral-900 tracking-tight">
+                Nesterway
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center gap-10">
               {navigationItems.map((item, index) => (
                 item.items ? (
                   <NavDropdown
@@ -78,7 +80,7 @@ export function LandingNav() {
                   <Link
                     key={index}
                     href={item.href!}
-                    className="text-gray-700 hover:text-ocean-600 font-medium transition-colors"
+                    className="text-neutral-600 hover:text-neutral-900 font-medium transition-colors text-[15px]"
                   >
                     {item.label}
                   </Link>
@@ -87,22 +89,25 @@ export function LandingNav() {
             </div>
 
             {/* Desktop CTAs */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center gap-6">
               <Link
                 href="/login"
-                className="text-gray-700 hover:text-ocean-600 font-medium transition-colors"
+                className="text-neutral-600 hover:text-neutral-900 font-medium transition-colors text-[15px]"
               >
-                Login
+                Log in
               </Link>
-              <CTAButton href="/signup" variant="primary" size="default">
-                Start Free Trial
-              </CTAButton>
+              <Link
+                href="/signup"
+                className="inline-flex items-center px-6 py-2.5 bg-neutral-900 text-white font-medium rounded-full hover:bg-neutral-800 transition-colors text-[15px]"
+              >
+                Start free
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 text-gray-700 hover:text-ocean-600"
+              className="md:hidden p-2 text-neutral-700 hover:text-neutral-900"
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6" />

@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Public_Sans, Geist_Mono } from "next/font/google";
+import { DM_Sans, Playfair_Display, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const publicSans = Public_Sans({
-  variable: "--font-public-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -14,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Travelama — Digital House Manual & Destination Guide",
+  title: "Nesterway — Digital Guest Guides for Modern Hosts",
   description:
     "Access property information and local recommendations for your short-term rental stay.",
   robots: {
@@ -39,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${publicSans.variable} ${geistMono.variable} antialiased`}
+        className={`${dmSans.variable} ${playfair.variable} ${geistMono.variable} antialiased`}
       >
         {children}
         <Toaster position="bottom-center" richColors />
